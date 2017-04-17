@@ -1,9 +1,10 @@
 const restify = require('restify');
 const appApi = require('./api/app.js');
 
-const AppFactory = require('./factory/app.js').AppFactory;
+const hub = require('./stream/hub.js').hub;
 
 const server = restify.createServer();
+
 
 server.use(restify.CORS({
   origins: ['*'], // defaults to ['*']
@@ -24,40 +25,25 @@ server.on('MethodNotAllowed', (req, res) => {
 });
 
 server.get('/apps', (req, response, next) => {
+  hub.apps$.subscribe(res => {
+    console.log(res)
+    response.send(res);
+    next();
+  }, rej => {
+    response.send(rej);
+    next(rej);
+  });
+});
+
+server.get('/appdetail', (req, response, next) => {
   const configs = {
     headers: {
-      'X-DCE-Access-Token': req.header('x-dce-access-token')
-    }
-  }
-  return appApi.appList(null, configs)
-  // .then(apps => {
-  // 	function _manageAnService(service) {
-  // 		return new ServiceFactory(service).get()
-  // 	}
-
-    // 	function _manageAnApp(app) {
-    // 		const promise = []
-    // 		app.Services.forEach(serv => {
-    // 			promise.push(_manageAnService(serv))
-    // 		})
-    // 		return this.$q.all(promise)
-    // 			.then(services => {
-    // 				app.Services = services
-    // 				// 处理外层 App 相关字段
-    // 				return new this.AppModel(app).get()
-    // 			})
-    // 	}
-    // 	const promises = []
-    // 	apps.forEach(app => {
-    // 		promises.push(_manageAnApp(app))
-    // 	})
-    // 	return this.$q.all(promises)
-    // })
+      'X-DCE-Access-Token': req.header('x-dce-access-token'),
+    },
+  };
+  return appApi.appDetail('sample14', configs)
     .then(res => {
-      const apps = res.map(a => {
-        return new AppFactory(a)
-      })
-      response.send(apps)
+      response.send(res)
       next()
     }, rej => {
       response.send(rej)
