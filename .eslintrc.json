@@ -4,8 +4,7 @@
     "sourceType": "module"
   },
   "env": {
-    "browser": false,
-    "es6": true,
+    "browser": true,
     "node": true,
     "jasmine": true
   },
@@ -142,7 +141,7 @@
 
     // suggest using template literals instead of string concatenation
     // http://eslint.org/docs/rules/prefer-template
-    // "prefer-template": "error",
+    "prefer-template": "error",
 
     // disallow generator functions that do not have yield
     // http://eslint.org/docs/rules/require-yield
@@ -396,7 +395,7 @@
     "id-length": "off",
     // this option sets a specific tab width for your code
     // https://github.com/eslint/eslint/blob/master/docs/rules/indent.md
-    "indent": ["error", "tab"],
+    "indent": ["error", 2, { "SwitchCase": 1, "VariableDeclarator": 1 }],
     // specify whether double or single quotes should be used in JSX attributes
     // http://eslint.org/docs/rules/jsx-quotes
     "jsx-quotes": ["error", "prefer-double"],
@@ -415,7 +414,7 @@
     // specify the maximum depth callbacks can be nested
     "max-nested-callbacks": "off",
     // require a capital letter for constructors
-    // "new-cap": ["error", {"newIsCap": false}],
+    "new-cap": ["error", {"newIsCap": true}],
     // disallow the omission of parentheses when invoking a constructor with no arguments
     "new-parens": "off",
     // allow/disallow an empty newline after var statement
@@ -466,7 +465,7 @@
     // enforce spacing before and after semicolons
     "semi-spacing": ["error", {"before": false, "after": true}],
     // require or disallow use of semicolons instead of ASI
-    "semi": ["error", "never"],
+    "semi": ["error", "always"],
     // sort variables within the same declaration block
     "sort-vars": "off",
     // require a space before certain keywords

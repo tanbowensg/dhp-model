@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.4",
-    "restify": "^4.3.0"
+    "restify": "^4.3.0",
+    "rxjs-es": "^5.0.0-beta.12"
   }
 }
