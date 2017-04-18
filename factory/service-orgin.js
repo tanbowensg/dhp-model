@@ -141,35 +141,35 @@ class Service {
 
     activate() {
         this.info = {
-            originalImageName: this.ORIGINAL_IMAGE_NAME,
+            // originalImageName: this.ORIGINAL_IMAGE_NAME,
             spec: this.spec(),
-            createdAt: this.createdAt(),
-            updatedAt: this.updatedAt(),
-            labels: this.labels(),
-            version: this.version(),
-            id: this.id(),
-            name: this.name(),
-            image: this.image(),
-            hostname: this.hostname(),
-            mode: this.mode(),
-            modeValue: this.modeValue(),
-            resources: this.resources(),
-            appName: this.appName(),
-            updateConfig: this.updateConfig(), // 用于「灰度发布」的设置
-            containerSpec: this.containerSpec(),
-            hostsMapping: this.hostsMapping(), // 域名映射
-            endpoint: this.endpoint(),
-            constraints: this.constraints(),
-            schedulePolicy: this.constraints(), // alias
-            ports: this.ports(),
-            networks: this.networks(),
-            dnsConfig: this.dnsConfig(),
-            highAvail: this.highAvail(),
-            healthCheck: this.healthCheck(),
-            storage: this.getStorageConfig(),
-            fsMounts: this.getFSMounts(),
-            linkedVolumes: this.getLinkedVolumes(),
-            logDriver: this.getLogDriverConfig(),
+            // createdAt: this.createdAt(),
+            // updatedAt: this.updatedAt(),
+            // labels: this.labels(),
+            // version: this.version(),
+            // id: this.id(),
+            // name: this.name(),
+            // image: this.image(),
+            // hostname: this.hostname(),
+            // mode: this.mode(),
+            // modeValue: this.modeValue(),
+            // resources: this.resources(),
+            // appName: this.appName(),
+            // updateConfig: this.updateConfig(), // 用于「灰度发布」的设置
+            // containerSpec: this.containerSpec(),
+            // hostsMapping: this.hostsMapping(), // 域名映射
+            // endpoint: this.endpoint(),
+            // constraints: this.constraints(),
+            // schedulePolicy: this.constraints(), // alias
+            // ports: this.ports(),
+            // networks: this.networks(),
+            // dnsConfig: this.dnsConfig(),
+            // highAvail: this.highAvail(),
+            // healthCheck: this.healthCheck(),
+            // storage: this.getStorageConfig(),
+            // fsMounts: this.getFSMounts(),
+            // linkedVolumes: this.getLinkedVolumes(),
+            // logDriver: this.getLogDriverConfig(),
         }
 
         this.info.isRunning = this.isRunning() // 判断该服务是否正在运行中
