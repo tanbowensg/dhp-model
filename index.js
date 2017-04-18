@@ -53,7 +53,6 @@ server.get('/appdetail', (req, response, next) => {
 
 server.get('/services', (req, response, next) => {
   hub.services$.subscribe(res => {
-    console.log(res)
     response.send(res);
     next();
   }, rej => {

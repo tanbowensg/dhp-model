@@ -3,17 +3,17 @@
 // 返回的是可以直接供前端渲染的数据
 const Rx = require('rxjs/Rx');
 const serviceApi = require('../api/service.js');
-// const AppClass = require('../factory/app.js').App;
+const ServiceClass = require('../factory/service.js').Service;
 
 const services$ = new Rx.BehaviorSubject();
 
 function getServices() {
   return serviceApi.list()
-    // .then(res => {
-    //   return res.map(app => {
-    //     return new AppClass(app);
-    //   });
-    // })
+    .then(res => {
+      return res.map(service => {
+        return new ServiceClass(service);
+      });
+    })
     .then(res => {
       services$.next(res);
     })
