@@ -1,7 +1,12 @@
-const util = require('../util.js')
+const util = require('../util.js');
 
-function appList(params, configs) {
-	return util.get('https://192.168.100.205/api/apps', configs)
+function list() {
+  return util.get('https://192.168.100.205/services');
 }
 
-exports.appList = appList
+function detail(serviceId) {
+  return util.get(`https://192.168.100.205/services/${serviceId}`);
+}
+
+exports.list = list;
+exports.detail = detail;

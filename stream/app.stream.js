@@ -8,7 +8,7 @@ const AppClass = require('../factory/app.js').App;
 const app$ = new Rx.BehaviorSubject();
 
 function getApps() {
-  return appApi.appList()
+  return appApi.list()
     .then(res => {
       return res.map(app => {
         return new AppClass(app);

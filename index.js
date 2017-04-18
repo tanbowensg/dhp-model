@@ -41,7 +41,7 @@ server.get('/appdetail', (req, response, next) => {
       'X-DCE-Access-Token': req.header('x-dce-access-token'),
     },
   };
-  return appApi.appDetail('sample14', configs)
+  return appApi.detail('sample14', configs)
     .then(res => {
       response.send(res)
       next()
@@ -49,6 +49,17 @@ server.get('/appdetail', (req, response, next) => {
       response.send(rej)
       next(rej)
     })
+});
+
+server.get('/services', (req, response, next) => {
+  hub.services$.subscribe(res => {
+    console.log(res)
+    response.send(res);
+    next();
+  }, rej => {
+    response.send(rej);
+    next(rej);
+  });
 });
 
 server.listen(4000, () => {
