@@ -26,7 +26,6 @@ server.on('MethodNotAllowed', (req, res) => {
 
 server.get('/apps', (req, response, next) => {
   hub.apps$.subscribe(res => {
-    console.log(res)
     response.send(res);
     next();
   }, rej => {
