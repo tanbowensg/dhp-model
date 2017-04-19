@@ -142,7 +142,7 @@ class Service {
     activate() {
         this.info = {
             // originalImageName: this.ORIGINAL_IMAGE_NAME,
-            spec: this.spec(),
+            // spec: this.spec(),
             // createdAt: this.createdAt(),
             // updatedAt: this.updatedAt(),
             // labels: this.labels(),
@@ -172,11 +172,11 @@ class Service {
             // logDriver: this.getLogDriverConfig(),
         }
 
-        this.info.isRunning = this.isRunning() // 判断该服务是否正在运行中
-        this.info.isStopped = this.isStopped() // 判断该服务是否已停止
-        this.info.isSystem = this.isSystem() // 判断该服务是否是系统服务，其下的服务只要有一个是系统服务就算是系统服务
-        this.info.inRunningMenu = this.inRunningMenu() // 判断该服务是否正在运行中，不包含系统服务，用于列表归类
-        this.info.inStoppedMenu = this.inStoppedMenu() // 判断该服务是否已停止，不包含系统服务，用于列表归类
+        // this.info.isRunning = this.isRunning() // 判断该服务是否正在运行中
+        // this.info.isStopped = this.isStopped() // 判断该服务是否已停止
+        // this.info.isSystem = this.isSystem() // 判断该服务是否是系统服务，其下的服务只要有一个是系统服务就算是系统服务
+        // this.info.inRunningMenu = this.inRunningMenu() // 判断该服务是否正在运行中，不包含系统服务，用于列表归类
+        // this.info.inStoppedMenu = this.inStoppedMenu() // 判断该服务是否已停止，不包含系统服务，用于列表归类
 
         this.methods = {
             scale: this._scale.bind(this),

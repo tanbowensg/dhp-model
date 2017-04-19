@@ -40,6 +40,7 @@ class Service {
   _init(service) {
     // {
     //   name: String,
+    //   spec: Object,
     //   id: String,
     //   version: Number,
     //   appName: String,
@@ -66,9 +67,14 @@ class Service {
     //   fsMounts: Array,
     //   linkedVolumes: Array,
     //   logDriver: Object,
+    //   isRunning: Bool,
+    //   isStopped: Bool,
+    //   isSystem: Bool,
+    //   inRunningMenu: Bool,
+    //   inStoppedMenu: Bool,
     // }
     const constraints = this._constraints(service);
-    // this.spec = service.Spec;
+    this.spec = service.Spec;
     this.name = service.Spec.Name;
     this.id = service.ID;
     this.version = service.Version.Index;
@@ -102,6 +108,13 @@ class Service {
     this.fsMounts = this._fsMounts(service);
     this.linkedVolumes = this._linkedVolumes(service);
     this.logDriver = this._logDriver(service);
+
+    this.isRunning = this._isRunning(service); // 判断该服务是否正在运行中
+    this.isStopped = this._isStopped(service); // 判断该服务是否已停止
+    this.isSystem = this._isSystem(service); // 判断该服务是否是系统服务，其下的服务只要有一个是系统服务就算是系统服务
+    this.inRunningMenu = this._inRunningMenu(service); // 判断该服务是否正在运行中，不包含系统服务，用于列表归类
+    this.inStoppedMenu = this._inStoppedMenu(service); // 判断该服务是否已停止，不包含系统服务，用于列表归类
+
   }
 
   /**
@@ -582,6 +595,61 @@ class Service {
     const options = _.get(service, 'Spec.TaskTemplate.LogDriver.Options', {});
 
     return { name, options };
+  }
+
+  /**
+   * 根据标签判断是否是系统服务
+   * @param {Object} service
+   * @return {Bool}
+   */
+  _isSystem(service) {
+    return !!_.get(service.Spec.Labels, 'io.daocloud.dce.system');
+  }
+
+  /**
+   * 判断该服务是否正在运行中
+   * 不包含系统 Service （系统服务算在 system 统计范畴中）
+   * 注意：依赖 this._mode ————博文
+   * @param {Object} service
+   * @return {Bool}
+   */
+  _isRunning(service) {
+    const mode = this._mode(service);
+    return mode.global || mode.replicas;
+  }
+
+  /**
+   * 判断服务是否已停止
+   * 注意：依赖 this._mode ————博文
+   * @param {Object} service
+   * @return {Bool}
+   */
+  _isStopped(service) {
+    const mode = this._mode(service);
+    return !mode.global && mode.replicas === 0;
+  }
+
+  /**
+   * 判断该服务是否正在运行中
+   * 不包含系统 Service （系统服务算在 system 统计范畴中）
+   * 注意：依赖 this._mode ————博文
+   * @param {Object} service
+   * @return {Bool}
+   */
+  _inRunningMenu(service) {
+    const mode = this._mode(service);
+    return (mode.global || mode.replicas) && !_.get(service.Spec.Labels, 'io.daocloud.dce.system');
+  }
+
+  /**
+   * 判断服务是否已停止
+   * 注意：依赖 this._mode ————博文
+   * @param {Object} service
+   * @return {Bool}
+   */
+  _inStoppedMenu(service) {
+    const mode = this._mode(service);
+    return (!mode.global && mode.replicas === 0) && !_.get(service.Spec.Labels, 'io.daocloud.dce.system');
   }
 }
 
