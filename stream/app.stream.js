@@ -21,9 +21,12 @@ function getApps() {
   Rx.Observable.fromPromise(appApi.list())
     .concatMap(apps => Rx.Observable.from(apps))
     .map(app => manageAppServices(app))
+    .map(app => new AppClass(app))
     .toArray()
     .subscribe(apps => {
       app$.next(apps);
+    }, rej => {
+      console.log(rej);
     });
 }
 

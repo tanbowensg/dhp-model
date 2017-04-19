@@ -105,5 +105,43 @@ function parseImageAddress(imgAddress) {
   return parsed;
 }
 
+/**
+ * 文件大小单位转换
+ * 不足 1K 的以 B 为单位
+ * 不足 1M 的以 K 为单位
+ * 依次类推
+ *
+ * 不合法的输入值或单位将返回  '-'
+ *
+ * @param {String|Number} num - 转换前的数量
+ * @param {string} unit - 输入值的单位
+ */
+function formatSize(num, unit, hodor) {
+  const DEFAULT_STR = hodor || '-';
+  const PRECISION = 1;
+  const units = ['B', 'K', 'M', 'G', 'T', 'P'];
+  if (typeof unit !== 'string') return DEFAULT_STR;
+  if (units.indexOf(unit.toUpperCase()) < 0) return DEFAULT_STR;
+  if (isNaN(parseFloat(num)) || !isFinite(num)) return DEFAULT_STR;
+
+  if (unit.toUpperCase() === 'B' && num < 1024 ||
+    unit.toUpperCase() === 'P' && num >= 1) {
+    return `${num}${unit.toUpperCase()}`;
+  }
+
+  const inputUnintIndex = units.indexOf(unit.toUpperCase());
+
+  if (num >= 1) {
+    const relIndex = Math.floor(Math.log(num) / Math.log(1024));
+    const number = (num / Math.pow(1024, Math.floor(relIndex))).toFixed(PRECISION);
+    const outputUnit = units[relIndex + inputUnintIndex];
+    return `${number}${outputUnit}`;
+  }
+  const number = (num * 1024).toFixed(PRECISION);
+  const outputUnit = units[inputUnintIndex - 1];
+  return `${number}${outputUnit}`;
+}
+
 exports.get = get;
 exports.parseImageAddress = parseImageAddress;
+exports.formatSize = formatSize;
