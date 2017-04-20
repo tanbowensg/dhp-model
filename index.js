@@ -1,5 +1,6 @@
 const restify = require('restify');
 const appApi = require('./api/app.js');
+const taskApi = require('./api/task.js');
 const appStream = require('./stream/app.stream.js');
 
 const hub = require('./stream/hub.js').hub;
@@ -75,6 +76,17 @@ server.post('/apps/:appName/restart', (req, response, next) => {
 
 server.get('/services', (req, response, next) => {
   const subscription = hub.services$.subscribe(res => {
+    response.send(res);
+    next();
+  }, rej => {
+    response.send(rej);
+    next(rej);
+  });
+  subscription.unsubscribe();
+});
+
+server.get('/tasks', (req, response, next) => {
+  const subscription = hub.tasks$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
