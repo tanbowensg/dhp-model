@@ -160,7 +160,6 @@ class App {
    */
   _isRunning(app) {
     const stateNum = this._servicesStateNum(app);
-    console.log(stateNum)
     return stateNum.running && !stateNum.system;
   }
 

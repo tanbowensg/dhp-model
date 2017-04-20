@@ -1,6 +1,6 @@
-const http = require('http')
+const http = require('http');
 
-function cutUrl (url) {
+function cutUrl(url) {
   // remove http
   const nohttp = url.split('//')[1];
   const host = nohttp.split('/')[0];
@@ -8,7 +8,7 @@ function cutUrl (url) {
   return { host, path };
 }
 
-function get (url, configs) {
+function get(url, configs) {
   return new Promise((resolve, reject) => {
     const hostPath = cutUrl(url)
     const options = {
@@ -34,6 +34,46 @@ function get (url, configs) {
         }
       });
     });
+  });
+}
+
+
+function post(url, params, configs) {
+  const postData = JSON.stringify(params || {});
+  const hostPath = cutUrl(url);
+
+  const options = {
+    hostname: hostPath.host,
+    path: hostPath.path,
+    port: 80,
+    headers: configs ? configs.headers : {},
+    method: 'POST',
+  };
+  return new Promise((resolve, reject) => {
+    const req = http.request(options, res => {
+      let json = '';
+      res.setEncoding('utf8');
+      res.on('data', d => {
+        json += d;
+      });
+      res.on('end', () => {
+        json = JSON.parse(json);
+        if (res.statusCode >= 400) {
+          const error = new Error();
+          error.body = json;
+          error.statusCode = res.statusCode;
+          reject(error);
+        } else {
+          resolve(json);
+        }
+      });
+    });
+    req.on('error', (e) => {
+      console.error(`problem with request: ${e.message}`);
+    });
+
+    req.write(postData);
+    req.end();
   });
 }
 
@@ -143,5 +183,6 @@ function formatSize(num, unit, hodor) {
 }
 
 exports.get = get;
+exports.post = post;
 exports.parseImageAddress = parseImageAddress;
 exports.formatSize = formatSize;

@@ -5,7 +5,6 @@ const hub = require('./stream/hub.js').hub;
 
 const server = restify.createServer();
 
-
 server.use(restify.CORS({
   origins: ['*'], // defaults to ['*']
   credentials: true, // defaults to false
@@ -42,12 +41,34 @@ server.get('/appdetail', (req, response, next) => {
   };
   return appApi.detail('sample14', configs)
     .then(res => {
-      response.send(res)
-      next()
+      response.send(res);
+      next();
     }, rej => {
-      response.send(rej)
-      next(rej)
-    })
+      response.send(rej);
+      next(rej);
+    });
+});
+
+server.post('/apps/:appName/stop', (req, response, next) => {
+  return appApi.stop(req.params.appName)
+    .then(res => {
+      response.send(res);
+      next();
+    }, rej => {
+      response.send(rej);
+      next(rej);
+    });
+});
+
+server.post('/apps/:appName/restart', (req, response, next) => {
+  return appApi.restart(req.params.appName)
+    .then(res => {
+      response.send(res);
+      next();
+    }, rej => {
+      response.send(rej);
+      next(rej);
+    });
 });
 
 server.get('/services', (req, response, next) => {
