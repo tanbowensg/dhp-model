@@ -1,5 +1,6 @@
 const restify = require('restify');
 const appApi = require('./api/app.js');
+const appStream = require('./stream/app.stream.js');
 
 const hub = require('./stream/hub.js').hub;
 
@@ -50,7 +51,7 @@ server.get('/appdetail', (req, response, next) => {
 });
 
 server.post('/apps/:appName/stop', (req, response, next) => {
-  return appApi.stop(req.params.appName)
+  return appStream.stop(req.params.appName)
     .then(res => {
       response.send(res);
       next();
@@ -61,7 +62,7 @@ server.post('/apps/:appName/stop', (req, response, next) => {
 });
 
 server.post('/apps/:appName/restart', (req, response, next) => {
-  return appApi.restart(req.params.appName)
+  return appStream.restart(req.params.appName)
     .then(res => {
       response.send(res);
       next();

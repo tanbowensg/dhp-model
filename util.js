@@ -9,14 +9,14 @@ function cutUrl(url) {
 }
 
 function get(url, configs) {
+  const hostPath = cutUrl(url)
+  const options = {
+    hostname: hostPath.host,
+    path: hostPath.path,
+    headers: configs ? configs.headers : null,
+  };
   return new Promise((resolve, reject) => {
-    const hostPath = cutUrl(url)
-    const options = {
-      hostname: hostPath.host,
-      path: hostPath.path,
-      headers: configs ? configs.headers : null,
-    };
-    http.get(options, res => {
+    const req = http.get(options, res => {
       let json = '';
       res.setEncoding('utf8');
       res.on('data', d => {
@@ -34,6 +34,7 @@ function get(url, configs) {
         }
       });
     });
+    req.end();
   });
 }
 

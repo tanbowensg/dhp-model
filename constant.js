@@ -21,6 +21,8 @@ const PRIVATE_LABELS = [
   CUSTOM_ICON_LABEL,
 ];
 
+const API_URL = 'http://192.168.100.205';
+
 const REGISTRY_CONSTANT = {
   // 特殊的 namespace 表示‘空’
   spNamespace: 'none__',
@@ -37,3 +39,4 @@ const REGISTRY_CONSTANT = {
 };
 
 exports.PRIVATE_LABELS = PRIVATE_LABELS;
+exports.API_URL = API_URL;

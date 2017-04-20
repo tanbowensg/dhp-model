@@ -30,5 +30,33 @@ function getApps() {
     });
 }
 
+/**
+ * 重启应用
+ * @param {String} appName
+ */
+function restart(appName) {
+  return appApi.restart(appName)
+    .then(res => {
+      getApps();
+      return res;
+    });
+}
+
+/**
+ * 停止应用
+ * @param {String} appName
+ */
+function stop(appName) {
+  return appApi.stop(appName)
+    .then(res => {
+      getApps();
+      return res;
+    });
+}
+
+
+
 exports.getApps = getApps;
+exports.restart = restart;
+exports.stop = stop;
 exports.app$ = app$;

@@ -1,11 +1,12 @@
 const util = require('../util.js');
+const API_URL = require('../constant.js').API_URL;
 
 function list() {
-  return util.get('https://192.168.100.205/services');
+  return util.get(`${API_URL}/services`);
 }
 
 function detail(serviceId) {
-  return util.get(`https://192.168.100.205/services/${serviceId}`);
+  return util.get(`${API_URL}/services/${serviceId}`);
 }
 
 exports.list = list;
