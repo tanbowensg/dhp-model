@@ -9,7 +9,7 @@ function cutUrl(url) {
 }
 
 function get(url, configs) {
-  const hostPath = cutUrl(url)
+  const hostPath = cutUrl(url);
   const options = {
     hostname: hostPath.host,
     path: hostPath.path,

@@ -25,13 +25,14 @@ server.on('MethodNotAllowed', (req, res) => {
 });
 
 server.get('/apps', (req, response, next) => {
-  hub.apps$.subscribe(res => {
+  const subscription = hub.apps$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
     response.send(rej);
     next(rej);
   });
+  subscription.unsubscribe();
 });
 
 server.get('/appdetail', (req, response, next) => {
@@ -40,7 +41,7 @@ server.get('/appdetail', (req, response, next) => {
       'X-DCE-Access-Token': req.header('x-dce-access-token'),
     },
   };
-  return appApi.detail('sample14', configs)
+  return appApi.detail('drupal', configs)
     .then(res => {
       response.send(res);
       next();
@@ -73,13 +74,14 @@ server.post('/apps/:appName/restart', (req, response, next) => {
 });
 
 server.get('/services', (req, response, next) => {
-  hub.services$.subscribe(res => {
+  const subscription = hub.services$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
     response.send(rej);
     next(rej);
   });
+  subscription.unsubscribe();
 });
 
 server.listen(4000, () => {
