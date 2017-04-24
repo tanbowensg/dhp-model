@@ -12,6 +12,7 @@ class App {
   _init(app) {
   // {
   //   name: String,
+  //   tasks: Array,
   //   services: Array,
   //   updateAt: Date,
   //   servicesName: String,
@@ -29,6 +30,7 @@ class App {
   //   memory: String,
   // }
     this.name = app.Name;
+    this.tasks = app.tasks; // 这个是在 stream 里塞进去的
     this.services = app.Services;
     this.updateAt = this._updateAt(app);
     this.servicesName = _.map(app.Services, 'name').join('、');
@@ -120,6 +122,7 @@ class App {
    * @return {Bool}
    */
   _allServicesAreGlobal(app) {
+    // console.log(app.Services?'you':'meiyou')
     return app.Services.length === this._globalServices(app).length;
   }
 

@@ -2,7 +2,7 @@ const Rx = require('rxjs/Rx');
 const taskApi = require('../api/task.js');
 // const ServiceClass = require('../factory/service.js').Service;
 
-const tasks$ = new Rx.BehaviorSubject();
+const tasks$ = new Rx.BehaviorSubject().filter(v => v);
 
 function getTasks() {
   return taskApi.list()
