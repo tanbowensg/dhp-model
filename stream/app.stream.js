@@ -24,7 +24,7 @@ function addTasksToApp(app, tasks) {
   const appTasks = _.chain(app.Services)
     .map('ID')
     // 这里就不对每个 task 重新发请求了，直接用 taskList 里的数据
-    .map(serviceId => _.find(tasks, { ServiceID: serviceId }))
+    .map(serviceId => _.find(tasks, { serviceId }))
     .value();
   app.tasks = appTasks;
   return app;
