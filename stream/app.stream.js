@@ -6,7 +6,6 @@ const _ = require('lodash');
 const appApi = require('../api/app.js');
 const AppClass = require('../factory/app.js').App;
 const ServiceClass = require('../factory/service.js').Service;
-const services$ = require('./service.stream.js').services$;
 const tasks$ = require('./task.stream.js').tasks$;
 
 const app$ = new Rx.BehaviorSubject();
