@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const formatSize = require('../util.js').formatSize;
+const formatSize = require('../util/util.js').formatSize;
 
 // 注意：整个 App Class 都是依赖 Service Class 的，必须先处理服务，才能处理应用————博文
 // 注意：还差一个租户————博文

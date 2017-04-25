@@ -96,6 +96,17 @@ server.get('/tasks', (req, response, next) => {
   subscription.unsubscribe();
 });
 
+server.get('/api/info', (req, response, next) => {
+  const subscription = hub.apiInfo$.subscribe(res => {
+    response.send(res);
+    next();
+  }, rej => {
+    response.send(rej);
+    next(rej);
+  });
+  subscription.unsubscribe();
+});
+
 server.listen(4000, () => {
   console.log('%s listening at %s', server.name, server.url)
 });

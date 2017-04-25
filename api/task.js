@@ -1,5 +1,5 @@
-const util = require('../util.js');
-const API_URL = require('../constant.js').API_URL;
+const util = require('../util/util.js');
+const API_URL = require('../constant/constant.js').API_URL;
 
 function list() {
   return util.get(`${API_URL}/tasks`);

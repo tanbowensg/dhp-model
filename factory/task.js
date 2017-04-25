@@ -1,6 +1,6 @@
 // const _ = require('lodash');
 const moment = require('moment');
-const parseImageAddress = require('../util.js').parseImageAddress;
+const parseImageAddress = require('../util/util.js').parseImageAddress;
 
 class Task {
   constructor(task, { serviceName }) {

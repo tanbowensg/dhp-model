@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const moment = require('moment');
 const shellQuote = require('shell-quote');
-const PRIVATE_LABELS = require('../constant.js').PRIVATE_LABELS;
-const parseImageAddress = require('../util.js').parseImageAddress;
+const PRIVATE_LABELS = require('../constant/constant.js').PRIVATE_LABELS;
+const parseImageAddress = require('../util/util.js').parseImageAddress;
 
 const UNITS = {
   MB: 1024 * 1024,
