@@ -9,7 +9,7 @@ const ServiceClass = require('../factory/service.js').Service;
 const tasks$ = require('./task.stream.js').tasks$;
 
 const app$ = new Rx.BehaviorSubject();
-
+let app$$;
 
 // 把格式化好的服务塞到应用里
 function addServicesToApp(app) {
@@ -31,11 +31,15 @@ function addTasksToApp(app, tasks) {
 }
 
 function getApps() {
-  Rx.Observable.fromPromise(appApi.list())
+  console.log('拿了一次 apps')
+  if (app$$) {
+    app$$.unsubscribe();
+  }
+  app$$ = Rx.Observable.fromPromise(appApi.list())
     // 塞 task
     // 这边理想情况是先 concatMap，然后再 combineLatest，然后一个个塞 task，和服务一样
     // 但是我遇到了问题，subject 和 Observable 的 combineLatest 好像和预期不同
-    // 而且 subject 不会 complete，所以不能用 toArray。，所以暂时这样。————博文
+    // 而且 subject 不会 complete，所以不能用 toArray，所以暂时这样。————博文
     .combineLatest(tasks$, (apps, tasks) => {
       return _.map(apps, app => addTasksToApp(app, tasks));
     })
@@ -43,11 +47,10 @@ function getApps() {
     .map(apps => _.map(apps, addServicesToApp))
     // 格式化
     .map(apps => _.map(apps, app => new AppClass(app)))
-    .subscribe(apps => {
-      app$.next(apps);
-    }, rej => {
-      console.log(rej);
-    });
+    .do(() => {
+      console.log('执行了');
+    })
+    .subscribe(app$);
 }
 
 /**
