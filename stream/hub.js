@@ -14,7 +14,7 @@ const appApi = require('../api/app.js');
 // 此乃一切 Observable 和 Subject 起点，故名 alpha ———— 博文
 const alpha$ = new Rx.BehaviorSubject().filter(v => v);
 // socket 紧跟在 alpha 之后
-const socket$ = new Rx.Subject().map(job => new JobClass(job));
+const socket$ = new Rx.Subject().map(job => (job === 'init' ? job : new JobClass(job)));
 
 // 但是有些 API 先于 alpha 存在（比如 apiInfo），因此它们叫 zero。
 // 但是它们不变不灭，也不需要被感知。 ———— 博文
@@ -27,17 +27,16 @@ const socket$ = new Rx.Subject().map(job => new JobClass(job));
     .subscribe(alpha$);
 })();
 
+// 启动 socket
 alpha$.subscribe(apiInfo => {
-  socketio.connect(apiInfo.StreamRoom)
+  // 由于一开始没有 job 推送，为了初始化整个数据池，先手动推送一个 init job
+  socket$.next('init');
+  socketio.connect(apiInfo.StreamRoom);
   socketio.bind('observable', job => {
     socket$.next(job);
   });
 });
 
-const hub = {
-  apps$: socket$.filter(job => job.Entity.ObjectType === 'Application'),
-  services$: socket$.filter(job => job.Entity.ObjectType === 'Service'),
-  tasks$: socket$.filter(job => job.Entity.ObjectType === 'Task'),
-};
-
-exports.hub = hub;
+exports.apps$ = socket$.filter(job => (job === 'init') || (job.Entity.ObjectType === 'Application'));
+exports.services$ = socket$.filter(job => (job === 'init') || (job.Entity.ObjectType === 'Service'));
+exports.tasks$ = socket$.filter(job => (job === 'init') || (job.Entity.ObjectType === 'Task'));

@@ -8,7 +8,18 @@ const AppClass = require('../factory/app.js').App;
 const ServiceClass = require('../factory/service.js').Service;
 const tasks$ = require('./task.stream.js').tasks$;
 
-const app$ = new Rx.BehaviorSubject();
+const hub = require('./hub.js');
+
+// const app$ = new Rx.BehaviorSubject().subscribe(hub);
+const apps$ = new Rx.BehaviorSubject().filter(v => v);
+// 一收到 socket，就直接去拿列表
+hub.apps$.concatMap(() => Rx.Observable.fromPromise(appApi.list()))
+  .subscribe(apps$);
+
+apps$.subscribe(apps => {
+  console.log('应用数量', apps.length)
+});
+
 let app$$;
 
 // 把格式化好的服务塞到应用里
@@ -47,9 +58,6 @@ function getApps() {
     .map(apps => _.map(apps, addServicesToApp))
     // 格式化
     .map(apps => _.map(apps, app => new AppClass(app)))
-    .do(() => {
-      console.log('执行了');
-    })
     .subscribe(app$);
 }
 
@@ -77,9 +85,7 @@ function stop(appName) {
     });
 }
 
-
-
 exports.getApps = getApps;
 exports.restart = restart;
 exports.stop = stop;
-exports.app$ = app$;
+// exports.app$ = app$;
