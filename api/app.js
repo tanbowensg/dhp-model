@@ -2,6 +2,7 @@ const util = require('../util/util.js');
 const API_URL = require('../constant/constant.js').API_URL;
 
 function list(configs = {}) {
+  console.log('重新拿了 应用 列表')
   return util.get(`${API_URL}/api/apps`, configs);
 }
 
