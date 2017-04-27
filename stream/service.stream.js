@@ -16,7 +16,7 @@ const services$ = hub.services$$.concatMap(() => Rx.Observable.fromPromise(servi
 services$.subscribe(servicesVm$$);
 
 servicesVm$$.subscribe(services => {
-  console.log('服务数量', services.length)
+  console.log('服务数量', services.length);
 });
 
 exports.services$ = services$;
