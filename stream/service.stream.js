@@ -7,17 +7,17 @@ const serviceApi = require('../api/service.js');
 const ServiceClass = require('../factory/service.js').Service;
 
 const hub = require('./hub.js');
-const servicesVm$ = new Rx.BehaviorSubject().filter(v => v);
+const servicesVm$$ = new Rx.BehaviorSubject().filter(v => v);
 // 一收到 socket，就直接去拿列表，并且格式化
-const services$ = hub.services$.concatMap(() => Rx.Observable.fromPromise(serviceApi.list()))
+const services$ = hub.services$$.concatMap(() => Rx.Observable.fromPromise(serviceApi.list()))
   // 格式化
   .map(services => _.map(services, service => new ServiceClass(service)));
 
-services$.subscribe(servicesVm$);
+services$.subscribe(servicesVm$$);
 
-servicesVm$.subscribe(services => {
+servicesVm$$.subscribe(services => {
   console.log('服务数量', services.length)
 });
 
 exports.services$ = services$;
-exports.servicesVm$ = servicesVm$;
+exports.servicesVm$$ = servicesVm$$;
