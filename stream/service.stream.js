@@ -5,7 +5,17 @@ const Rx = require('rxjs/Rx');
 const serviceApi = require('../api/service.js');
 const ServiceClass = require('../factory/service.js').Service;
 
-const services$ = new Rx.BehaviorSubject();
+const hub = require('./hub.js');
+// const services$ = new Rx.BehaviorSubject();
+const services$ = new Rx.BehaviorSubject().filter(v => v);
+// 一收到 socket，就直接去拿列表
+hub.services$.concatMap(() => Rx.Observable.fromPromise(serviceApi.list()))
+  .subscribe(services$);
+
+services$.subscribe(services => {
+  console.log('服务数量', services.length)
+});
+
 
 function getServices() {
   return serviceApi.list()
