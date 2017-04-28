@@ -2,6 +2,7 @@ const restify = require('restify');
 const appApi = require('./api/app.js');
 const α$$ = require('./stream/hub.js').α$$;
 const appsVm$$ = require('./stream/app.stream.js').appsVm$$;
+const getAppDetail = require('./stream/app.stream.js').getAppDetail;
 const servicesVm$$ = require('./stream/service.stream.js').servicesVm$$;
 const tasksVm$$ = require('./stream/task.stream.js').tasksVm$$;
 const networksVm$$ = require('./stream/network.stream.js').networksVm$$;
@@ -22,7 +23,7 @@ server.on('MethodNotAllowed', (req, res) => {
     res.header('Access-Control-Allow-Headers', restify.CORS.ALLOW_HEADERS.join(', '))
     res.send(204)
   } else {
-    res.send(new restify.MethodNotAllowedError())
+    res.send(new restify.MethodNotAllowedError());
   }
 });
 
@@ -38,13 +39,8 @@ server.get('/apps', (req, response, next) => {
 });
 
 server.get('/appdetail', (req, response, next) => {
-  const configs = {
-    headers: {
-      'X-DCE-Access-Token': req.header('x-dce-access-token'),
-    },
-  };
-  return appApi.detail('drupal', configs)
-    .then(res => {
+  return getAppDetail('prometheus')
+    .subscribe(res => {
       response.send(res);
       next();
     }, rej => {

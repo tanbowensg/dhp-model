@@ -25,10 +25,10 @@ const hub$$ = new Rx.Subject()
   });
 
 // 这些都是分管各个数据的 Observable，它们都能独当一面，但是都受 hub 号令。
-const apps$$ = hub$$.filter(jobs => jobs.includes('app'));
 const services$$ = hub$$.filter(jobs => jobs.includes('service'));
 const tasks$$ = hub$$.filter(jobs => jobs.includes('task'));
 const networks$$ = hub$$.filter(jobs => jobs.includes('task'));
+const apps$$ = hub$$.filter(jobs => jobs.includes('app'));
 
 // ————————————————从下面开始，整个应用的数据就开始初始化了————————————————————
 

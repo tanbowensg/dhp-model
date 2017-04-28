@@ -4,12 +4,17 @@ const formatSize = require('../util/util.js').formatSize;
 // 注意：整个 App Class 都是依赖 Service Class 的，必须先处理服务，才能处理应用————博文
 // 注意：还差一个租户————博文
 
+/**
+ * @param {Object} 原始 app
+ * @param {Array} 全部的格式化好的 tasks
+ * @param {Array} 全部的格式化好的 services
+ */
 class App {
-  constructor(app) {
-    this._init(app);
+  constructor(app, tasks, services) {
+    this._init(app, tasks, services);
   }
 
-  _init(app) {
+  _init(app, tasks, services) {
   // {
   //   name: String,
   //   tasks: Array,
@@ -28,13 +33,16 @@ class App {
   //   ports: Array,
   //   cpu: String,
   //   memory: String,
+  //   formatted: Bool
   // }
     this.name = app.Name;
-    this.tasks = app.tasks; // 这个是在 stream 里塞进去的
-    this.services = app.Services;
+    this.tasks = this._tasks(app, tasks);
+    this.services = this._services(app, services);
+    app.services = this.services; // 为了方便起见，把服务也暂时存到 app 里面
+    console.log(this.services)
     this.updateAt = this._updateAt(app);
-    this.servicesName = _.map(app.Services, 'name').join('、');
-    this.images = _.map(app.Services, 'image.image').join('、');
+    this.servicesName = _.map(app.services, 'name').join('、');
+    this.images = _.map(app.services, 'image.image').join('、');
     this.servicesStateNum = this._servicesStateNum(app);
     this.hasAccessPoints = this._hasAccessPoints(app);
     this.globalServices = this._globalServices(app);
@@ -46,6 +54,33 @@ class App {
     this.isSystem = this._isSystem(app);
     this.cpu = this._cpu(app);
     this.memory = this._memory(app);
+    this.formatted = true;
+  }
+
+  /**
+   * tasks
+   * 依赖：app 的原始的 Services
+   * @param {Object} app
+   * @param {Array} 全部的 tasks
+   * @return {Array} 应用的 tasks
+   */
+  _tasks(app, tasks) {
+    return _.chain(app.Services)
+      .map('ID')
+      // 这里就不对每个 task 重新发请求了，直接用 taskList 里的数据
+      .map(serviceId => _.find(tasks, { serviceId }))
+      .value();
+  }
+
+  /**
+   * 服务
+   * 依赖：app 的原始的 Services
+   * @param {Object} app
+   * @param {Array} 全部的 services
+   * @return {Array} 应用的 services
+   */
+  _services(app, services) {
+    return _.map(app.Services, service => _.find(services, { id: service.ID }));
   }
 
   /* 运行中、停止的、系统的、服务数量
@@ -61,7 +96,7 @@ class App {
       stopped: 0,
       system: 0,
     };
-    _.forEach(app.Services, serv => {
+    _.forEach(app.services, serv => {
       if (!serv.mode.replicas && !serv.mode.global) {
         result.stopped++;
       } else {
@@ -80,12 +115,12 @@ class App {
    * @return {Bool}
    */
   _hasAccessPoints(app) {
-    return _.chain(app.Services)
+    return _.chain(app.services)
       .map(serv => serv.ports)
       .flatten()
       .some(v => v)
       .value();
-    // _.flatten(app.Services.map(serv => serv.ports)).some(v => v);
+    // _.flatten(app.services.map(serv => serv.ports)).some(v => v);
   }
 
   /* 更新时间
@@ -94,7 +129,8 @@ class App {
    */
   _updateAt(app) {
     let time = 0;
-    _.forEach(app.Services, serv => {
+    _.forEach(app.services, serv => {
+      console.log(serv)
       const value = serv.updatedAt.valueOf();
       if (value > time.valueOf()) {
         time = serv.updatedAt;
@@ -109,10 +145,10 @@ class App {
    * @return {Array}
    */
   _globalServices(app) {
-    return _.chain(app.Services)
+    return _.chain(app.services)
       .filter(serv => serv.mode.global)
       .map('name')
-      .value()
+      .value();
   }
 
   /**
@@ -122,8 +158,7 @@ class App {
    * @return {Bool}
    */
   _allServicesAreGlobal(app) {
-    // console.log(app.Services?'you':'meiyou')
-    return app.Services.length === this._globalServices(app).length;
+    return app.services.length === this._globalServices(app).length;
   }
 
   /**
@@ -133,7 +168,7 @@ class App {
    */
   _appTemplate(app) {
     let templateLabel = '';
-    _.forEach(app.Services, serv => {
+    _.forEach(app.services, serv => {
       const _templateLabel = _.get(serv.spec, 'Labels[\'io.daocloud.dce.template\']', false);
       if (_templateLabel && !templateLabel) {
         templateLabel = _templateLabel;
@@ -148,7 +183,7 @@ class App {
    * @return {Array}
    */
   _ports(app) {
-    return _.chain(app.Services)
+    return _.chain(app.services)
       .map(serv => serv.ports)
       .flatten()
       .filter(v => !!v)
@@ -199,7 +234,7 @@ class App {
     }
     let cpuNum = 0;
     let unlimited = true;
-    _.forEach(app.Services, serv => {
+    _.forEach(app.services, serv => {
       if (unlimited) {
         const _cpu = serv.resources.cpuLimit;
         const _replicas = serv.mode.replicas;
@@ -226,7 +261,7 @@ class App {
     }
     let memory = 0;
     let unlimited = true;
-    _.forEach(app.Services, serv => {
+    _.forEach(app.services, serv => {
       if (unlimited) {
         const _memory = serv.resources.memLimitRaw;
         const _replicas = serv.mode.replicas;
@@ -245,10 +280,40 @@ class App {
   }
 }
 
-// 这个是应用的详情的格式化类
+/**
+ * 这个是应用的详情的格式化类
+ * @param {Object} app 列表格式化过的 app 或者原始的 app 都可以
+ * @param {Array} networks
+ */
 class AppDetail extends App {
-  _init(app) {
-    super._init(app);
+  _init(app, networks) {
+    // 如果是没有格式化过的，那就再格式化一下
+    if (!app.formatted) {
+      super._init(app);
+    }
+    this._detailFormat(app, networks);
+  }
+
+  _detailFormat(app, networks) {
+
+  }
+
+  /**
+   * 
+   * @param {Object} app
+   * @return {String}
+   */
+  _networkName(app, networks) {
+    app.services.map(serv => {
+      serv.info.networks.map(net => {
+        const p = this.networkService.detailOrigin(net.id)
+          .then(res => {
+            net.name = res.data.Name;
+          });
+        promise.push(p);
+      });
+    });
+    return this.$q.all(promise).then(() => app);
   }
 }
 
