@@ -1,9 +1,9 @@
 const restify = require('restify');
 const appApi = require('./api/app.js');
-const taskApi = require('./api/task.js');
-const appStream = require('./stream/app.stream.js');
-
-const hub = require('./stream/hub.js').hub;
+const α$$ = require('./stream/hub.js').α$$;
+const apps$$ = require('./stream/app.stream.js').appsVm$$;
+const services$$ = require('./stream/service.stream.js').servicesVm$$;
+const tasks$$ = require('./stream/task.stream.js').tasksVm$$;
 
 const server = restify.createServer();
 
@@ -26,7 +26,7 @@ server.on('MethodNotAllowed', (req, res) => {
 });
 
 server.get('/apps', (req, response, next) => {
-  const subscription = hub.apps$.subscribe(res => {
+  const subscription = apps$$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
@@ -52,30 +52,30 @@ server.get('/appdetail', (req, response, next) => {
     });
 });
 
-server.post('/apps/:appName/stop', (req, response, next) => {
-  return appStream.stop(req.params.appName)
-    .then(res => {
-      response.send(res);
-      next();
-    }, rej => {
-      response.send(rej);
-      next(rej);
-    });
-});
+// server.post('/apps/:appName/stop', (req, response, next) => {
+//   return appStream.stop(req.params.appName)
+//     .then(res => {
+//       response.send(res);
+//       next();
+//     }, rej => {
+//       response.send(rej);
+//       next(rej);
+//     });
+// });
 
-server.post('/apps/:appName/restart', (req, response, next) => {
-  return appStream.restart(req.params.appName)
-    .then(res => {
-      response.send(res);
-      next();
-    }, rej => {
-      response.send(rej);
-      next(rej);
-    });
-});
+// server.post('/apps/:appName/restart', (req, response, next) => {
+//   return appStream.restart(req.params.appName)
+//     .then(res => {
+//       response.send(res);
+//       next();
+//     }, rej => {
+//       response.send(rej);
+//       next(rej);
+//     });
+// });
 
 server.get('/services', (req, response, next) => {
-  const subscription = hub.services$.subscribe(res => {
+  const subscription = services$$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
@@ -86,7 +86,7 @@ server.get('/services', (req, response, next) => {
 });
 
 server.get('/tasks', (req, response, next) => {
-  const subscription = hub.tasks$.subscribe(res => {
+  const subscription = tasks$$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
@@ -96,15 +96,14 @@ server.get('/tasks', (req, response, next) => {
   subscription.unsubscribe();
 });
 
+let apiInfo;
+α$$.subscribe(res => {
+  apiInfo = res;
+});
 server.get('/api/info', (req, response, next) => {
-  const subscription = hub.apiInfo$.subscribe(res => {
-    response.send(res);
-    next();
-  }, rej => {
-    response.send(rej);
-    next(rej);
-  });
-  subscription.unsubscribe();
+  console.log(apiInfo);
+  response.send(apiInfo);
+  next();
 });
 
 server.listen(4000, () => {
