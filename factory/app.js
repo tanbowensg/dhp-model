@@ -245,4 +245,12 @@ class App {
   }
 }
 
+// 这个是应用的详情的格式化类
+class AppDetail extends App {
+  _init(app) {
+    super._init(app);
+  }
+}
+
 exports.App = App;
+exports.AppDetail = AppDetail;
