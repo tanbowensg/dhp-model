@@ -1,4 +1,6 @@
+const _ = require('lodash');
 const http = require('http');
+const PRIVATE_LABELS = require('../constant/constant.js').PRIVATE_LABELS;
 
 function cutUrl(url) {
   // remove http
@@ -183,7 +185,71 @@ function formatSize(num, unit, hodor) {
   return `${number}${outputUnit}`;
 }
 
+// 处理形如"主机名/应用名_自己的名字"的名称字符串
+function nameFilter(str, require) {
+  let names = {};
+  let hostName;
+  let name2;
+  let appName;
+  let ownName;
+  if (str.indexOf('/') > -1) {
+    hostName = str.split('/')[0];
+    name2 = str.split('/')[1];
+  } else {
+    hostName = '-';
+    name2 = str;
+  }
+
+  if (name2.indexOf('_') > -1) {
+    appName = name2.split('_')[0];
+  } else {
+    appName = '-';
+  }
+
+  ownName = name2;
+
+  // 如果长度大于64，又没有 app 名字，那么它就是一个随机名字，应该截取
+  if (ownName.length >= 64 && appName === '-') {
+    ownName = ownName.slice(0, 8);
+  }
+
+  names = {
+    app: appName,
+    host: hostName,
+    full: name2,
+    own: ownName,
+  };
+
+  return names[require];
+}
+
+
+// 几点注意事项
+// 1、所有的处理的方法都必须是纯函数，至少在这个文件中是纯的
+// 2、如果不是必要的话，禁止使用已经格式化好的某个数据去格式化另一个数据
+
+/*
+ * Service 的标签中有专门用于后端系统识别的私有标签，
+ * 比如 `io.daocloud.dce.owner`, 这类标签不能暴露到前端。
+ *
+ * Service 原始的标签（包括对用户不可见的私有标签）
+ *
+ * @param {object} originalLabels - 包含有私有方法的标签键值对
+ * @return {object}  不包含私有方法的标签键值对
+ */
+function filterLabels(originalLabels) {
+  const filterdLabels = _.clone(originalLabels);
+  _.forEach(PRIVATE_LABELS, privateLabel => {
+    if (filterdLabels.hasOwnProperty(privateLabel)) {
+      delete filterdLabels[privateLabel];
+    }
+  });
+  return filterdLabels;
+}
+
 exports.get = get;
 exports.post = post;
 exports.parseImageAddress = parseImageAddress;
 exports.formatSize = formatSize;
+exports.nameFilter = nameFilter;
+exports.filterLabels = filterLabels;

@@ -5,17 +5,52 @@ const Rx = require('rxjs/Rx');
 const _ = require('lodash');
 const networkApi = require('../api/network.js');
 const hub = require('./hub.js');
-// const NetworkClass = require('../factory/network.js').Network;
+const NetworkClass = require('../factory/network.js').Network;
 const networksVm$$ = new Rx.BehaviorSubject().filter(v => v);
+
+/**
+ * 网络分类
+ * @param {Array} networks
+ * @return {
+    all: {Array},
+    user: {Array},
+    virtual: {Array},
+    local: {Array},
+  };
+ */
+function classifyNetworks(networks) {
+  const result = {
+    all: [],
+    user: [],
+    virtual: [],
+    local: [],
+  };
+  networks.forEach(net => {
+    if (!(net.name === 'host' || net.name === 'none'
+      || net.name === 'dce_default' || net.name === 'docker_gwbridge')) {
+      result.user.push(net);
+
+      if (net.Scope === 'local') {
+        result.local.push(net);
+      } else {
+        result.virtual.push(net);
+      }
+    }
+  });
+  result.all = result.local.concat(result.virtual);
+  return result;
+}
+
 // 一收到 socket，就直接去拿列表，并且格式化
 const networks$ = hub.networks$$.concatMap(() => Rx.Observable.fromPromise(networkApi.list()))
   // 格式化
-  // .map(networks => _.map(networks, network => new NetworkClass(network)));
+  .map(networks => _.map(networks, network => new NetworkClass(network)))
+  .map(classifyNetworks);
 
 networks$.subscribe(networksVm$$);
 
 networksVm$$.subscribe(networks => {
-  console.log('网络数量', networks.length);
+  console.log('网络数量', networks.all.length);
 });
 
 exports.networks$ = networks$;

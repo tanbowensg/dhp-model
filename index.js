@@ -1,10 +1,10 @@
 const restify = require('restify');
 const appApi = require('./api/app.js');
 const α$$ = require('./stream/hub.js').α$$;
-const apps$$ = require('./stream/app.stream.js').appsVm$$;
-const services$$ = require('./stream/service.stream.js').servicesVm$$;
-const tasks$$ = require('./stream/task.stream.js').tasksVm$$;
-const networks$$ = require('./stream/network.stream.js').networksVm$$;
+const appsVm$$ = require('./stream/app.stream.js').appsVm$$;
+const servicesVm$$ = require('./stream/service.stream.js').servicesVm$$;
+const tasksVm$$ = require('./stream/task.stream.js').tasksVm$$;
+const networksVm$$ = require('./stream/network.stream.js').networksVm$$;
 
 const server = restify.createServer();
 
@@ -27,7 +27,7 @@ server.on('MethodNotAllowed', (req, res) => {
 });
 
 server.get('/apps', (req, response, next) => {
-  const subscription = apps$$.subscribe(res => {
+  const subscription = appsVm$$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
@@ -76,7 +76,7 @@ server.get('/appdetail', (req, response, next) => {
 // });
 
 server.get('/services', (req, response, next) => {
-  const subscription = services$$.subscribe(res => {
+  const subscription = servicesVm$$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
@@ -87,7 +87,7 @@ server.get('/services', (req, response, next) => {
 });
 
 server.get('/tasks', (req, response, next) => {
-  const subscription = tasks$$.subscribe(res => {
+  const subscription = tasksVm$$.subscribe(res => {
     response.send(res);
     next();
   }, rej => {
@@ -104,6 +104,16 @@ let apiInfo;
 server.get('/api/info', (req, response, next) => {
   console.log(apiInfo);
   response.send(apiInfo);
+  next();
+});
+
+let network;
+networksVm$$.subscribe(res => {
+  network = res;
+});
+server.get('/networks', (req, response, next) => {
+  console.log(network);
+  response.send(network);
   next();
 });
 
