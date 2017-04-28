@@ -13,7 +13,7 @@ const hub$$ = new Rx.Subject()
   // hub 作为 socket 的转发器。因为实际要刷新的数据类型，并不总是等于 socket 推送过来的类型。
   .map(job => {
     if (job === 'all') {
-      return ['app', 'service', 'task'];
+      return ['app', 'service', 'task', 'network'];
     }
     switch (_.get(job, 'Entity.ObjectType')) {
       case 'Application':
@@ -28,6 +28,7 @@ const hub$$ = new Rx.Subject()
 const apps$$ = hub$$.filter(jobs => jobs.includes('app'));
 const services$$ = hub$$.filter(jobs => jobs.includes('service'));
 const tasks$$ = hub$$.filter(jobs => jobs.includes('task'));
+const networks$$ = hub$$.filter(jobs => jobs.includes('task'));
 
 // ————————————————从下面开始，整个应用的数据就开始初始化了————————————————————
 
@@ -63,3 +64,4 @@ exports.α$$ = α$$;
 exports.apps$$ = apps$$;
 exports.services$$ = services$$;
 exports.tasks$$ = tasks$$;
+exports.networks$$ = networks$$;

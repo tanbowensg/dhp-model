@@ -4,6 +4,7 @@ const α$$ = require('./stream/hub.js').α$$;
 const apps$$ = require('./stream/app.stream.js').appsVm$$;
 const services$$ = require('./stream/service.stream.js').servicesVm$$;
 const tasks$$ = require('./stream/task.stream.js').tasksVm$$;
+const networks$$ = require('./stream/network.stream.js').networksVm$$;
 
 const server = restify.createServer();
 
