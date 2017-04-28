@@ -36,7 +36,7 @@ const apps$ = hub.apps$$.concatMap(() => Rx.Observable.fromPromise(appApi.list()
     // 这边理想情况是先 concatMap，然后再 combineLatest，然后一个个塞 task，和服务一样
     // 但是我遇到了问题，subject 和 Observable 的 combineLatest 好像和预期不同
     // 而且 subject 不会 complete，所以不能用 toArray，所以暂时这样。————博文
-    .combineLatest(tasksVm$$, (apps, tasks) => {
+    .zip(tasksVm$$, (apps, tasks) => {
       return _.map(apps, app => addTasksToApp(app, tasks));
     })
     // 塞服务
