@@ -5,6 +5,7 @@ const getAppDetail = require('./stream/app.stream.js').getAppDetail;
 const servicesVm$$ = require('./stream/service.stream.js').servicesVm$$;
 const tasksVm$$ = require('./stream/task.stream.js').tasksVm$$;
 const networksVm$$ = require('./stream/network.stream.js').networksVm$$;
+const containersVm$$ = require('./stream/container.stream.js').containersVm$$;
 
 const server = restify.createServer();
 
@@ -109,6 +110,16 @@ networksVm$$.subscribe(res => {
 server.get('/networks', (req, response, next) => {
   console.log(network);
   response.send(network);
+  next();
+});
+
+let container;
+containersVm$$.subscribe(res => {
+  container = res;
+});
+server.get('/containers', (req, response, next) => {
+  console.log(container);
+  response.send(container);
   next();
 });
 

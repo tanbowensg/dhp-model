@@ -4,6 +4,10 @@ const formatSize = require('../util/util.js').formatSize;
 // 注意：整个 App Class 都是依赖 Service Class 的，必须先处理服务，才能处理应用————博文
 // 注意：还差一个租户————博文
 
+// 几点注意事项
+// 1、所有的处理的方法都必须是纯函数，至少在这个文件中是纯的
+// 2、如果不是必要的话，禁止使用已经格式化好的某个数据去格式化另一个数据
+
 /**
  * @param {Object} 原始 app
  * @param {Array} 全部的格式化好的 tasks

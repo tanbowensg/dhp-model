@@ -49,4 +49,17 @@ const JOB = {
   },
 };
 
+const CONTAINER = {
+  status: {
+    created: '已创建',
+    restarting: '重启中',
+    running: '运行中',
+    up: '运行中',
+    paused: '已暂停',
+    exited: '已停止',
+    dead: '已损毁',
+  },
+};
+
 exports.JOB = JOB;
+exports.CONTAINER = CONTAINER;

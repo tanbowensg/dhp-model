@@ -13,19 +13,20 @@ const hub$$ = new Rx.Subject()
   // hub 作为 socket 的转发器。因为实际要刷新的数据类型，并不总是等于 socket 推送过来的类型。
   .map(job => {
     if (job === 'all') {
-      return ['app', 'service', 'task', 'network'];
+      return ['app', 'service', 'task', 'network', 'container'];
     }
     switch (_.get(job, 'Entity.ObjectType')) {
       case 'Application':
       case 'Service':
       case 'Task':
-        return ['app', 'service', 'task'];
+        return ['app', 'service', 'task', 'container'];
       default:
     }
   });
 
 // 这些都是分管各个数据的 Observable，它们都能独当一面，但是都受 hub 号令。
 const services$$ = hub$$.filter(jobs => jobs.includes('service'));
+const containers$$ = hub$$.filter(jobs => jobs.includes('container'));
 const tasks$$ = hub$$.filter(jobs => jobs.includes('task'));
 const networks$$ = hub$$.filter(jobs => jobs.includes('task'));
 const apps$$ = hub$$.filter(jobs => jobs.includes('app'));
@@ -65,3 +66,4 @@ exports.apps$$ = apps$$;
 exports.services$$ = services$$;
 exports.tasks$$ = tasks$$;
 exports.networks$$ = networks$$;
+exports.containers$$ = containers$$;

@@ -40,7 +40,6 @@ function get(url, configs) {
   });
 }
 
-
 function post(url, params, configs) {
   const postData = JSON.stringify(params || {});
   const hostPath = cutUrl(url);
@@ -222,11 +221,6 @@ function nameFilter(str, require) {
 
   return names[require];
 }
-
-
-// 几点注意事项
-// 1、所有的处理的方法都必须是纯函数，至少在这个文件中是纯的
-// 2、如果不是必要的话，禁止使用已经格式化好的某个数据去格式化另一个数据
 
 /*
  * Service 的标签中有专门用于后端系统识别的私有标签，
