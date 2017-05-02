@@ -5,8 +5,10 @@ const Rx = require('rxjs/Rx');
 const _ = require('lodash');
 const appApi = require('../api/app.js');
 const AppClass = require('../factory/app.js').App;
+const AppDetailClass = require('../factory/app.js').AppDetail;
 const tasksVm$$ = require('./task.stream.js').tasksVm$$;
 const servicesVm$$ = require('./service.stream.js').servicesVm$$;
+const networksVm$$ = require('./network.stream.js').networksVm$$;
 
 const hub = require('./hub.js');
 
@@ -20,9 +22,9 @@ const apps$ = hub.apps$$.concatMap(() => Rx.Observable.fromPromise(appApi.list()
 apps$.subscribe(appsVm$$);
 
 appsVm$$.subscribe(apps => {
-  console.log('应用数量', apps.length)
+  console.log('应用数量', apps.length);
 }, rej => {
-  console.log(rej)
+  console.log(rej);
 });
 
 /**
@@ -32,6 +34,10 @@ appsVm$$.subscribe(apps => {
  */
 function getAppDetail(appName) {
   return appsVm$$.map(apps => _.find(apps, app => app.name === appName))
+    .combineLatest(networksVm$$, (app, networks) => {
+      console.log(networks.all.length)
+      return new AppDetailClass(app, networks.all);
+    });
 }
 
 exports.apps$ = apps$;

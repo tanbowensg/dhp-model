@@ -39,7 +39,6 @@ class App {
     this.tasks = this._tasks(app, tasks);
     this.services = this._services(app, services);
     app.services = this.services; // 为了方便起见，把服务也暂时存到 app 里面
-    console.log(this.services)
     this.updateAt = this._updateAt(app);
     this.servicesName = _.map(app.services, 'name').join('、');
     this.images = _.map(app.services, 'image.image').join('、');
@@ -130,7 +129,6 @@ class App {
   _updateAt(app) {
     let time = 0;
     _.forEach(app.services, serv => {
-      console.log(serv)
       const value = serv.updatedAt.valueOf();
       if (value > time.valueOf()) {
         time = serv.updatedAt;
@@ -282,38 +280,37 @@ class App {
 
 /**
  * 这个是应用的详情的格式化类
- * @param {Object} app 列表格式化过的 app 或者原始的 app 都可以
+ * @param {Object} 列表格式化过的 app
+ * @param {Array} 全部的格式化好的 网络
  * @param {Array} networks
  */
-class AppDetail extends App {
-  _init(app, networks) {
-    // 如果是没有格式化过的，那就再格式化一下
-    if (!app.formatted) {
-      super._init(app);
-    }
-    this._detailFormat(app, networks);
+class AppDetail {
+  constructor(app, networks) {
+    this._init(app, networks);
   }
 
-  _detailFormat(app, networks) {
-
+  _init(app, networks) {
+    // 把 app 里的属性复制出来
+    _.forEach(app, (val, key) => {
+      this[key] = val;
+    });
+    // 把网络的名字塞到服务里
+    this.services = this._networkName(app, networks);
   }
 
   /**
-   * 
+   * 给应用的服务的网络里添加网络的名称，因为本来只有 ID
+   * 其实这里还可以加很多东西，甚至把网络列表里的所有内容塞进去，如果需要的话。
    * @param {Object} app
-   * @return {String}
+   * @return {Array} 服务
    */
   _networkName(app, networks) {
-    app.services.map(serv => {
-      serv.info.networks.map(net => {
-        const p = this.networkService.detailOrigin(net.id)
-          .then(res => {
-            net.name = res.data.Name;
-          });
-        promise.push(p);
+    return _.map(app.services, service => {
+      _.forEach(service.networks, network => {
+        network.name = _.find(networks, { id: network.id }).name;
       });
+      return service;
     });
-    return this.$q.all(promise).then(() => app);
   }
 }
 

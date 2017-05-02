@@ -1,5 +1,4 @@
 const restify = require('restify');
-const appApi = require('./api/app.js');
 const α$$ = require('./stream/hub.js').α$$;
 const appsVm$$ = require('./stream/app.stream.js').appsVm$$;
 const getAppDetail = require('./stream/app.stream.js').getAppDetail;
