@@ -1,6 +1,6 @@
-// const _ = require('lodash');
-const moment = require('moment');
-const parseImageAddress = require('../util/util.js').parseImageAddress;
+// import _ from 'lodash';
+import moment from 'moment';
+import { parseImageAddress } from '../util/util.js';
 
 class Task {
   constructor(task, { serviceName }) {
@@ -71,4 +71,6 @@ class Task {
   }
 }
 
-exports.Task = Task;
+export {
+  Task,
+};

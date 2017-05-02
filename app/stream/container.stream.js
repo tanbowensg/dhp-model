@@ -1,11 +1,11 @@
 // 这个 app 的流负责所有的 app 的格式化。
 // 输入应该是后端发回来的 raw 的数据
 // 返回的是可以直接供前端渲染的数据
-const Rx = require('rxjs/Rx');
-const _ = require('lodash');
-const containerApi = require('../api/container.js');
-const ContainerClass = require('../factory/container.js').Container;
-const hub = require('./hub.js');
+import Rx from 'rxjs/Rx';
+import _ from 'lodash';
+import containerApi from '../api/container.js';
+import { Container as ContainerClass } from '../factory/container.js';
+import hub from './hub.js';
 const containersVm$$ = new Rx.BehaviorSubject().filter(v => v);
 
 // 一收到 socket，就直接去拿列表，并且格式化

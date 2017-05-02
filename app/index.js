@@ -1,13 +1,11 @@
-// const restify = require('restify');
 import restify from 'restify';
-// const α$$ = require('./app/stream/hub.js').α$$;
-// const appsVm$$ = require('./app/stream/app.stream.js').appsVm$$;
-// const getAppDetail = require('./app/stream/app.stream.js').getAppDetail;
-// const servicesVm$$ = require('./app/stream/service.stream.js').servicesVm$$;
-// const tasksVm$$ = require('./app/stream/task.stream.js').tasksVm$$;
-// const networksVm$$ = require('./app/stream/network.stream.js').networksVm$$;
-// const containersVm$$ = require('./app/stream/container.stream.js').containersVm$$;
-// const registriesVm$$ = require('./app/stream/registry.stream.js').registriesVm$$;
+import hub from './stream/hub.js';
+import { appsVm$$, getAppDetail } from './stream/app.stream.js';
+import { servicesVm$$ } from './stream/service.stream.js';
+import { tasksVm$$ } from './stream/task.stream.js';
+import { networksVm$$ } from './stream/network.stream.js';
+import { containersVm$$ } from './stream/container.stream.js';
+import { registriesVm$$ } from './stream/registry.stream.js';
 
 const server = restify.createServer();
 
@@ -96,7 +94,7 @@ server.get('/tasks', (req, response, next) => {
 });
 
 let apiInfo;
-α$$.subscribe(res => {
+hub.α$$.subscribe(res => {
   apiInfo = res;
 });
 server.get('/api/info', (req, response, next) => {

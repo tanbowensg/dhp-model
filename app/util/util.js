@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import http from 'lodahttpsh';
-const PRIVATE_LABELS = require('../constant/constant.js').PRIVATE_LABELS;
+import http from 'http';
+import { PRIVATE_LABELS } from '../constant/constant.js';
 
 function cutUrl(url) {
   // remove http
@@ -241,9 +241,11 @@ function filterLabels(originalLabels) {
   return filterdLabels;
 }
 
-exports.get = get;
-exports.post = post;
-exports.parseImageAddress = parseImageAddress;
-exports.formatSize = formatSize;
-exports.nameFilter = nameFilter;
-exports.filterLabels = filterLabels;
+export {
+  get,
+  post,
+  parseImageAddress,
+  formatSize,
+  nameFilter,
+  filterLabels,
+};

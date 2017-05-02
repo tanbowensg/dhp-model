@@ -1,16 +1,15 @@
 // 这个 app 的流负责所有的 app 的格式化。
 // 输入应该是后端发回来的 raw 的数据
 // 返回的是可以直接供前端渲染的数据
-const Rx = require('rxjs/Rx');
-const _ = require('lodash');
-const appApi = require('../api/app.js');
-const AppClass = require('../factory/app.js').App;
-const AppDetailClass = require('../factory/app.js').AppDetail;
-const tasksVm$$ = require('./task.stream.js').tasksVm$$;
-const servicesVm$$ = require('./service.stream.js').servicesVm$$;
-const networksVm$$ = require('./network.stream.js').networksVm$$;
+import Rx from 'rxjs/Rx';
+import _ from 'lodash';
+import appApi from '../api/app.js';
+import { App as AppClass, AppDetail as AppDetailClass } from '../factory/app.js';
+import { tasksVm$$ } from './task.stream.js';
+import { servicesVm$$ } from './service.stream.js';
+import { networksVm$$ } from './network.stream.js';
 
-const hub = require('./hub.js');
+import hub from './hub.js';
 
 const appsVm$$ = new Rx.BehaviorSubject().filter(v => v);
 // 一收到 socket，就直接去拿列表
@@ -40,6 +39,8 @@ function getAppDetail(appName) {
     });
 }
 
-exports.apps$ = apps$;
-exports.appsVm$$ = appsVm$$;
-exports.getAppDetail = getAppDetail;
+export {
+  apps$,
+  appsVm$$,
+  getAppDetail,
+};

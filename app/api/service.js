@@ -1,14 +1,16 @@
-const util = require('../util/util.js');
-const API_URL = require('../constant/constant.js').API_URL;
+import { get } from '../util/util.js';
+import { API_URL } from '../constant/constant.js';
 
 function list() {
-  console.log('重新拿了 服务 列表')
-  return util.get(`${API_URL}/services`);
+  console.log('重新拿了 服务 列表');
+  return get(`${API_URL}/services`);
 }
 
 function detail(serviceId) {
-  return util.get(`${API_URL}/services/${serviceId}`);
+  return get(`${API_URL}/services/${serviceId}`);
 }
 
-exports.list = list;
-exports.detail = detail;
+export default {
+  list,
+  detail,
+};

@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const moment = require('moment');
-const JOB_I18N = require('../constant/i18n.js').JOB;
+import _ from 'lodash';
+import moment from 'moment';
+import { JOB as JOB_I18N } from '../constant/i18n.js';
 
 class Job {
   constructor(job) {
@@ -67,4 +67,6 @@ class Job {
   }
 }
 
-exports.Job = Job;
+export {
+  Job,
+};

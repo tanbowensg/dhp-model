@@ -1,6 +1,6 @@
-const io = require('socket.io-client');
-const API_URL = require('../constant/constant.js').API_URL;
-const JobClass = require('../factory/job.js').Job;
+import io from 'socket.io-client';
+import { API_URL } from '../constant/constant.js';
+import { Job as JobClass } from '../factory/job.js';
 
 let socket;
 const callbackCancellers = {};
@@ -41,6 +41,8 @@ function unbind(action) {
   }
 }
 
-exports.connect = connect;
-exports.bind = bind;
-exports.unbind = unbind;
+export default {
+  connect,
+  bind,
+  unbind,
+};

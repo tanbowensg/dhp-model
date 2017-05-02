@@ -61,5 +61,7 @@ const CONTAINER = {
   },
 };
 
-exports.JOB = JOB;
-exports.CONTAINER = CONTAINER;
+export {
+  JOB,
+  CONTAINER,
+};

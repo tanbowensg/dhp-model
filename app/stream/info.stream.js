@@ -1,5 +1,5 @@
-const Rx = require('rxjs/Rx');
-const infoApi = require('../api/info.js');
+import Rx from 'rxjs/Rx';
+import infoApi from '../api/info.js';
 
 const apiInfo$ = new Rx.BehaviorSubject().filter(v => v);
 
@@ -13,5 +13,7 @@ function getApiInfo() {
   return observable;
 }
 
-exports.getApiInfo = getApiInfo;
-exports.apiInfo$ = apiInfo$;
+export {
+  getApiInfo,
+  apiInfo$,
+};

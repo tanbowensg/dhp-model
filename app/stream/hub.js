@@ -1,8 +1,8 @@
 // 这是一个集线器，也是一个数据池
-const Rx = require('rxjs/Rx');
-const _ = require('lodash');
-const infoStream = require('./info.stream.js');
-const socketio = require('../util/socket.js');
+import Rx from 'rxjs/Rx';
+import _ from 'lodash';
+import { getApiInfo } from './info.stream.js';
+import socketio from '../util/socket.js';
 
 // 此乃一切 Observable 和 Subject 起点，故名 alpha ———— 博文
 const α$$ = new Rx.BehaviorSubject().filter(v => v);
@@ -36,7 +36,7 @@ const registries$$ = hub$$.filter(jobs => jobs.includes('registry'));
 // 有些 API 先于 alpha 存在（比如 apiInfo），因此它们叫 zero。
 // 但是它们不变不灭，也不需要被感知。alpha 会负责转达和保存它们的信息。 ———— 博文
 (function zero() {
-  Rx.Observable.combineLatest(infoStream.getApiInfo())
+  Rx.Observable.combineLatest(getApiInfo())
     // 下面是个数组，由于现在只有一个元素，所以就简单点来吧
     .map(array => {
       return array[0];
@@ -61,10 +61,12 @@ const registries$$ = hub$$.filter(jobs => jobs.includes('registry'));
   .subscribe(hub$$);
 });
 
-exports.α$$ = α$$;
-exports.apps$$ = apps$$;
-exports.services$$ = services$$;
-exports.tasks$$ = tasks$$;
-exports.networks$$ = networks$$;
-exports.containers$$ = containers$$;
-exports.registries$$ = registries$$;
+export default {
+  α$$,
+  apps$$,
+  services$$,
+  tasks$$,
+  networks$$,
+  containers$$,
+  registries$$,
+};

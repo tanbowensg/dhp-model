@@ -1,11 +1,11 @@
 // 这个 app 的流负责所有的 app 的格式化。
 // 输入应该是后端发回来的 raw 的数据
 // 返回的是可以直接供前端渲染的数据
-const Rx = require('rxjs/Rx');
-const _ = require('lodash');
-const networkApi = require('../api/network.js');
-const hub = require('./hub.js');
-const NetworkClass = require('../factory/network.js').Network;
+import Rx from 'rxjs/Rx';
+import _ from 'lodash';
+import networkApi from '../api/network.js';
+import hub from './hub.js';
+import { Network as NetworkClass } from '../factory/network.js';
 const networksVm$$ = new Rx.BehaviorSubject().filter(v => v);
 
 /**
@@ -53,5 +53,7 @@ networksVm$$.subscribe(networks => {
   console.log('网络数量', networks.all.length);
 });
 
-exports.networks$ = networks$;
-exports.networksVm$$ = networksVm$$;
+export {
+  networks$,
+  networksVm$$,
+};

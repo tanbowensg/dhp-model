@@ -1,8 +1,7 @@
-const _ = require('lodash');
-const moment = require('moment');
-const shellQuote = require('shell-quote');
-const parseImageAddress = require('../util/util.js').parseImageAddress;
-const filterLabels = require('../util/util.js').filterLabels;
+import _ from 'lodash';
+import moment from 'moment';
+import shellQuote from 'shell-quote';
+import { parseImageAddress, filterLabels } from '../util/util.js';
 
 const UNITS = {
   MB: 1024 * 1024,
@@ -630,4 +629,6 @@ class Service {
   }
 }
 
-exports.Service = Service;
+export {
+  Service,
+};

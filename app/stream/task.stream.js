@@ -1,12 +1,11 @@
-const Rx = require('rxjs/Rx');
-const _ = require('lodash');
-const taskApi = require('../api/task.js');
-const TaskClass = require('../factory/task.js').Task;
-const servicesVm$$ = require('./service.stream.js').servicesVm$$;
+import Rx from 'rxjs/Rx';
+import _ from 'lodash';
+import taskApi from '../api/task.js';
+import { Task as TaskClass } from '../factory/task.js';
+import { servicesVm$$ } from './service.stream.js';
 
-const hub = require('./hub.js');
+import hub from './hub.js';
 const tasksVm$$ = new Rx.BehaviorSubject().filter(v => v);
-
 
 // 一收到 socket，就直接去拿列表，然后加以格式化的 Observable
 const tasks$ = hub.tasks$$.concatMap(() => Rx.Observable.fromPromise(taskApi.list()))
@@ -26,8 +25,10 @@ const tasks$ = hub.tasks$$.concatMap(() => Rx.Observable.fromPromise(taskApi.lis
 tasks$.subscribe(tasksVm$$);
 
 tasksVm$$.subscribe(tasks => {
-  console.log('task数量', tasks.length)
+  console.log('task数量', tasks.length);
 });
 
-exports.tasks$ = tasks$;
-exports.tasksVm$$ = tasksVm$$;
+export {
+  tasks$,
+  tasksVm$$,
+};

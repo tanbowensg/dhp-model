@@ -1,7 +1,6 @@
-// const _ = require('lodash');
-const moment = require('moment');
-const nameFilter = require('../util/util.js').nameFilter;
-const filterLabels = require('../util/util.js').filterLabels;
+// import _ from 'lodash';
+import moment from 'moment';
+import { nameFilter, filterLabels } from '../util/util.js';
 
 class Network {
   constructor(network) {
@@ -59,4 +58,6 @@ class Network {
   }
 }
 
-exports.Network = Network;
+export {
+  Network,
+};

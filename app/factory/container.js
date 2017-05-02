@@ -1,6 +1,6 @@
-// const _ = require('lodash');
-const parseImageAddress = require('../util/util.js').parseImageAddress;
-const CONTAINER_I18N = require('../constant/i18n.js').CONTAINER;
+// import _ from 'lodash';
+import { parseImageAddress } from '../util/util.js';
+import { CONTAINER as CONTAINER_I18N } from '../constant/i18n.js';
 
 // 这个是用来处理容器状态的字符串的
 // https://github.com/docker/docker/blob/master/container/state.go#L123
@@ -174,4 +174,6 @@ class Container {
   }
 }
 
-exports.Container = Container;
+export {
+  Container,
+};
