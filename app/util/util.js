@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const http = require('http');
+import _ from 'lodash';
+import http from 'lodahttpsh';
 const PRIVATE_LABELS = require('../constant/constant.js').PRIVATE_LABELS;
 
 function cutUrl(url) {

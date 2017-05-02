@@ -1,12 +1,13 @@
-const restify = require('restify');
-const α$$ = require('./stream/hub.js').α$$;
-const appsVm$$ = require('./stream/app.stream.js').appsVm$$;
-const getAppDetail = require('./stream/app.stream.js').getAppDetail;
-const servicesVm$$ = require('./stream/service.stream.js').servicesVm$$;
-const tasksVm$$ = require('./stream/task.stream.js').tasksVm$$;
-const networksVm$$ = require('./stream/network.stream.js').networksVm$$;
-const containersVm$$ = require('./stream/container.stream.js').containersVm$$;
-const registriesVm$$ = require('./stream/registry.stream.js').registriesVm$$;
+// const restify = require('restify');
+import restify from 'restify';
+// const α$$ = require('./app/stream/hub.js').α$$;
+// const appsVm$$ = require('./app/stream/app.stream.js').appsVm$$;
+// const getAppDetail = require('./app/stream/app.stream.js').getAppDetail;
+// const servicesVm$$ = require('./app/stream/service.stream.js').servicesVm$$;
+// const tasksVm$$ = require('./app/stream/task.stream.js').tasksVm$$;
+// const networksVm$$ = require('./app/stream/network.stream.js').networksVm$$;
+// const containersVm$$ = require('./app/stream/container.stream.js').containersVm$$;
+// const registriesVm$$ = require('./app/stream/registry.stream.js').registriesVm$$;
 
 const server = restify.createServer();
 
