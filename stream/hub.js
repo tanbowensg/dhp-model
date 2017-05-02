@@ -3,7 +3,6 @@ const Rx = require('rxjs/Rx');
 const _ = require('lodash');
 const infoStream = require('./info.stream.js');
 const socketio = require('../util/socket.js');
-// const JobClass = require('../factory/job.js').Job;
 
 // 此乃一切 Observable 和 Subject 起点，故名 alpha ———— 博文
 const α$$ = new Rx.BehaviorSubject().filter(v => v);
@@ -13,7 +12,7 @@ const hub$$ = new Rx.Subject()
   // hub 作为 socket 的转发器。因为实际要刷新的数据类型，并不总是等于 socket 推送过来的类型。
   .map(job => {
     if (job === 'all') {
-      return ['app', 'service', 'task', 'network', 'container'];
+      return ['app', 'service', 'task', 'network', 'container', 'registry'];
     }
     switch (_.get(job, 'Entity.ObjectType')) {
       case 'Application':
@@ -30,6 +29,7 @@ const containers$$ = hub$$.filter(jobs => jobs.includes('container'));
 const tasks$$ = hub$$.filter(jobs => jobs.includes('task'));
 const networks$$ = hub$$.filter(jobs => jobs.includes('task'));
 const apps$$ = hub$$.filter(jobs => jobs.includes('app'));
+const registries$$ = hub$$.filter(jobs => jobs.includes('registry'));
 
 // ————————————————从下面开始，整个应用的数据就开始初始化了————————————————————
 
@@ -67,3 +67,4 @@ exports.services$$ = services$$;
 exports.tasks$$ = tasks$$;
 exports.networks$$ = networks$$;
 exports.containers$$ = containers$$;
+exports.registries$$ = registries$$;

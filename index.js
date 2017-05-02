@@ -6,6 +6,7 @@ const servicesVm$$ = require('./stream/service.stream.js').servicesVm$$;
 const tasksVm$$ = require('./stream/task.stream.js').tasksVm$$;
 const networksVm$$ = require('./stream/network.stream.js').networksVm$$;
 const containersVm$$ = require('./stream/container.stream.js').containersVm$$;
+const registriesVm$$ = require('./stream/registry.stream.js').registriesVm$$;
 
 const server = restify.createServer();
 
@@ -120,6 +121,16 @@ containersVm$$.subscribe(res => {
 server.get('/containers', (req, response, next) => {
   console.log(container);
   response.send(container);
+  next();
+});
+
+let registry;
+registriesVm$$.subscribe(res => {
+  registry = res;
+});
+server.get('/registries', (req, response, next) => {
+  console.log(registry);
+  response.send(registry);
   next();
 });
 
