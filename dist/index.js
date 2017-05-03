@@ -20,6 +20,8 @@ var _containerStream = require('./stream/container.stream.js');
 
 var _registryStream = require('./stream/registry.stream.js');
 
+var _repositoryStream = require('./stream/repository.stream.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var server = _restify2.default.createServer();

@@ -12,7 +12,7 @@ const hub$$ = new Rx.Subject()
   // hub 作为 socket 的转发器。因为实际要刷新的数据类型，并不总是等于 socket 推送过来的类型。
   .map(job => {
     if (job === 'all') {
-      return ['app', 'service', 'task', 'network', 'container', 'registry'];
+      return ['app', 'service', 'task', 'network', 'container', 'registry', 'repository'];
     }
     switch (_.get(job, 'Entity.ObjectType')) {
       case 'Application':

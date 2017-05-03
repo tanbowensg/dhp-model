@@ -12,7 +12,15 @@ function getBuildinRegistry() {
   return get(`${API_URL}/api/settings/buildin-registry`);
 }
 
+// 获取一个镜像工场的 repository 列表
+function getRegistryRepositories(registryName, namespace, WithRemote = 1) {
+  // buildin-registry 的名字就叫 buildin-registry
+  namespace = namespace ? `/${namespace}` : '';
+  return get(`${API_URL}/api/registries/${registryName}/repositories${namespace}?WithRemote=${WithRemote}`);
+}
+
 export default {
   list,
   getBuildinRegistry,
+  getRegistryRepositories,
 };
