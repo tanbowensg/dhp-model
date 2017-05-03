@@ -4,17 +4,23 @@ var _restify = require('restify');
 
 var _restify2 = _interopRequireDefault(_restify);
 
+var _hub = require('./stream/hub.js');
+
+var _hub2 = _interopRequireDefault(_hub);
+
+var _appStream = require('./stream/app.stream.js');
+
+var _serviceStream = require('./stream/service.stream.js');
+
+var _taskStream = require('./stream/task.stream.js');
+
+var _networkStream = require('./stream/network.stream.js');
+
+var _containerStream = require('./stream/container.stream.js');
+
+var _registryStream = require('./stream/registry.stream.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var α$$ = require('./app/stream/hub.js').α$$; // const restify = require('restify');
-
-var appsVm$$ = require('./app/stream/app.stream.js').appsVm$$;
-var getAppDetail = require('./app/stream/app.stream.js').getAppDetail;
-var servicesVm$$ = require('./app/stream/service.stream.js').servicesVm$$;
-var tasksVm$$ = require('./app/stream/task.stream.js').tasksVm$$;
-var networksVm$$ = require('./app/stream/network.stream.js').networksVm$$;
-var containersVm$$ = require('./app/stream/container.stream.js').containersVm$$;
-var registriesVm$$ = require('./app/stream/registry.stream.js').registriesVm$$;
 
 var server = _restify2.default.createServer();
 
@@ -37,7 +43,7 @@ server.on('MethodNotAllowed', function (req, res) {
 });
 
 server.get('/apps', function (req, response, next) {
-  var subscription = appsVm$$.subscribe(function (res) {
+  var subscription = _appStream.appsVm$$.subscribe(function (res) {
     response.send(res);
     next();
   }, function (rej) {
@@ -48,7 +54,7 @@ server.get('/apps', function (req, response, next) {
 });
 
 server.get('/appdetail', function (req, response, next) {
-  return getAppDetail('prometheus').subscribe(function (res) {
+  return (0, _appStream.getAppDetail)('prometheus').subscribe(function (res) {
     response.send(res);
     next();
   }, function (rej) {
@@ -80,7 +86,7 @@ server.get('/appdetail', function (req, response, next) {
 // });
 
 server.get('/services', function (req, response, next) {
-  var subscription = servicesVm$$.subscribe(function (res) {
+  var subscription = _serviceStream.servicesVm$$.subscribe(function (res) {
     response.send(res);
     next();
   }, function (rej) {
@@ -91,7 +97,7 @@ server.get('/services', function (req, response, next) {
 });
 
 server.get('/tasks', function (req, response, next) {
-  var subscription = tasksVm$$.subscribe(function (res) {
+  var subscription = _taskStream.tasksVm$$.subscribe(function (res) {
     response.send(res);
     next();
   }, function (rej) {
@@ -102,7 +108,7 @@ server.get('/tasks', function (req, response, next) {
 });
 
 var apiInfo = void 0;
-α$$.subscribe(function (res) {
+_hub2.default.α$$.subscribe(function (res) {
   apiInfo = res;
 });
 server.get('/api/info', function (req, response, next) {
@@ -112,7 +118,7 @@ server.get('/api/info', function (req, response, next) {
 });
 
 var network = void 0;
-networksVm$$.subscribe(function (res) {
+_networkStream.networksVm$$.subscribe(function (res) {
   network = res;
 });
 server.get('/networks', function (req, response, next) {
@@ -122,7 +128,7 @@ server.get('/networks', function (req, response, next) {
 });
 
 var container = void 0;
-containersVm$$.subscribe(function (res) {
+_containerStream.containersVm$$.subscribe(function (res) {
   container = res;
 });
 server.get('/containers', function (req, response, next) {
@@ -132,7 +138,7 @@ server.get('/containers', function (req, response, next) {
 });
 
 var registry = void 0;
-registriesVm$$.subscribe(function (res) {
+_registryStream.registriesVm$$.subscribe(function (res) {
   registry = res;
 });
 server.get('/registries', function (req, response, next) {

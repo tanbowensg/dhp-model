@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp && node ./dist/index.js"
+    "start": "gulp babel && node ./dist/index.js",
+    "build": "gulp webpack",
+    "watch": "gulp watch",
+    "start:dist": "node ./build/bundle.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +22,9 @@
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2"
+    "webpack": "^2.4.1",
+    "webpack-stream": "^3.2.0"
   }
 }
