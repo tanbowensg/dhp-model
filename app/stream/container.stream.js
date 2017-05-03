@@ -9,7 +9,7 @@ import hub from './hub.js';
 const containersVm$$ = new Rx.BehaviorSubject().filter(v => v);
 
 // 一收到 socket，就直接去拿列表，并且格式化
-const containers$ = hub.containers$$.concatMap(() => Rx.Observable.fromPromise(containerApi.list()))
+const containers$ = hub.containers$.concatMap(() => Rx.Observable.fromPromise(containerApi.list()))
   // 格式化
   .map(containers => _.map(containers, container => new ContainerClass(container)));
 

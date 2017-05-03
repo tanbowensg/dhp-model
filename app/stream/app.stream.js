@@ -13,7 +13,7 @@ import hub from './hub.js';
 
 const appsVm$$ = new Rx.BehaviorSubject().filter(v => v);
 // 一收到 socket，就直接去拿列表
-const apps$ = hub.apps$$.concatMap(() => Rx.Observable.fromPromise(appApi.list()))
+const apps$ = hub.apps$.concatMap(() => Rx.Observable.fromPromise(appApi.list()))
   .zip(tasksVm$$, servicesVm$$, (apps, tasks, services) => {
     return _.map(apps, app => new AppClass(app, tasks, services));
   });

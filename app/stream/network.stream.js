@@ -42,7 +42,7 @@ function classifyNetworks(networks) {
 }
 
 // 一收到 socket，就直接去拿列表，并且格式化
-const networks$ = hub.networks$$.concatMap(() => Rx.Observable.fromPromise(networkApi.list()))
+const networks$ = hub.networks$.concatMap(() => Rx.Observable.fromPromise(networkApi.list()))
   // 格式化
   .map(networks => _.map(networks, network => new NetworkClass(network)))
   .map(classifyNetworks);

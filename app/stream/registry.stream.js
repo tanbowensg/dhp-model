@@ -6,7 +6,7 @@ import hub from './hub.js';
 const registriesVm$$ = new Rx.BehaviorSubject().filter(v => v);
 
 // 一收到 socket，就直接去拿列表，并且格式化
-const registries$ = hub.registries$$.concatMap(() => Rx.Observable.fromPromise(registryApi.list()));
+const registries$ = hub.registries$.concatMap(() => Rx.Observable.fromPromise(registryApi.list()));
   // 格式化
   // .map(registries => _.map(registries, registry => new RegistryClass(registry)));
 

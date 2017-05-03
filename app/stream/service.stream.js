@@ -9,7 +9,7 @@ import { Service as ServiceClass } from '../factory/service.js';
 import hub from './hub.js';
 const servicesVm$$ = new Rx.BehaviorSubject().filter(v => v);
 // 一收到 socket，就直接去拿列表，并且格式化
-const services$ = hub.services$$.concatMap(() => Rx.Observable.fromPromise(serviceApi.list()))
+const services$ = hub.services$.concatMap(() => Rx.Observable.fromPromise(serviceApi.list()))
   // 格式化
   .map(services => _.map(services, service => new ServiceClass(service)));
 
