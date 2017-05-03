@@ -6,6 +6,7 @@
   "scripts": {
     "start": "gulp babel && node ./dist/index.js",
     "build": "gulp webpack",
+    "build:browser": "gulp webpack:browser",
     "watch": "gulp watch",
     "start:dist": "node ./build/bundle.js"
   },

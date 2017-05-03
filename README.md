@@ -4,9 +4,11 @@
 ## 启动方法
 `npm start`：在本地的 4000 端口启动服务器，具体路由参看 index.js 里的内容。
 
-`npm build`：打包代码，结果在 build 目录中。
+`npm run build`：打包代码，结果在 build 目录中。
 
-`npm watch`：持续用 babel 编译源代码。
+`npm run build:browser`：打包代码，结果在 build 目录中。
+
+`npm run watch`：持续用 babel 编译源代码。
 
 # 项目详细介绍
 ## 目录结构
@@ -23,7 +25,9 @@
 
 │   ├── util                    一些方便的函数
 
-│   └── index.js                应用入口文件
+│   ├── index.js                应用入口文件
+
+│   └── index.js                用来编译浏览器版代码，可以无视
 
 ├── build
 
@@ -34,6 +38,8 @@
 ├── gulpfile.js                 
 
 ├── package.json
+
+├── index.html                  用来测试编译出来的浏览器版代码，可以无视
 
 └── webpack.config.js           webpack 配置文件
 
