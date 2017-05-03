@@ -232,7 +232,11 @@ function nameFilter(str, require) {
  * @return {object}  不包含私有方法的标签键值对
  */
 function filterLabels(originalLabels) {
+  if (!originalLabels) {
+    return {};
+  }
   const filterdLabels = _.clone(originalLabels);
+  console.log('filterdLabels', filterdLabels)
   _.forEach(PRIVATE_LABELS, privateLabel => {
     if (filterdLabels.hasOwnProperty(privateLabel)) {
       delete filterdLabels[privateLabel];
