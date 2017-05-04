@@ -149,6 +149,16 @@ server.get('/registries', function (req, response, next) {
   next();
 });
 
+var repositories = void 0;
+_repositoryStream.repositoriesVm$$.subscribe(function (res) {
+  repositories = res;
+});
+server.get('/repositories', function (req, response, next) {
+  console.log(repositories);
+  response.send(repositories);
+  next();
+});
+
 server.listen(4000, function () {
   console.log('%s listening at %s', server.name, server.url);
 });

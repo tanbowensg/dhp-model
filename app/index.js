@@ -134,6 +134,16 @@ server.get('/registries', (req, response, next) => {
   next();
 });
 
+let repositories;
+repositoriesVm$$.subscribe(res => {
+  repositories = res;
+});
+server.get('/repositories', (req, response, next) => {
+  console.log(repositories);
+  response.send(repositories);
+  next();
+});
+
 server.listen(4000, () => {
   console.log('%s listening at %s', server.name, server.url)
 });

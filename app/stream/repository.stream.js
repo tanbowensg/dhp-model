@@ -6,31 +6,33 @@ import _ from 'lodash';
 import registryApi from '../api/registry.js';
 // 由于 repository 是 registry 的一个属性，所以就直接接在 registry 后面，不要 hub 了。
 import { registries$ } from './registry.stream.js';
-// import { Service as ServiceClass } from '../factory/service.js';
+import { Repository as RepositoryClass } from '../factory/repository.js';
+import { REGISTRY_CONSTANT } from '../constant/constant.js';
 
 const repositoriesVm$$ = new Rx.BehaviorSubject().filter(v => v);
 // 每当拿到一个 registry 的时候，就去请求他的 repository。但其实 registry 不依赖 repository。
-// TODO: 其实这里还不知道 registry 的名字是哪个属性，以后要改
 const repositories$ = registries$.concatMap(registries => Rx.Observable.from(registries))
   .concatMap(registry => {
-    const name = registry.Name ? registry.Name : 'buildin-registry';
+    // 如果没有名字的话，说明它是内置镜像工场
+    const name = registry.Name ? registry.Name : REGISTRY_CONSTANT.DCERegistryName;
     const p = registryApi.getRegistryRepositories(name)
-      .then(repos => {
-        registry.repos = repos;
-        const result = {};
-        result[name] = repos;
-        return result;
-      });
+      .then(repos => [name, repos]);
     return Rx.Observable.fromPromise(p);
+  })
+  .map(([registryName, repos]) => {
+    const formattedRepos = _.map(repos, repo => {
+      return new RepositoryClass(repo);
+      // return repo.Name;
+    });
+    return [registryName, formattedRepos];
   })
   .toArray();
   // 格式化
-  // .map(repositories => _.map(repositories, service => new ServiceClass(service)));
 
 repositories$.subscribe(repositoriesVm$$);
 
 repositoriesVm$$.subscribe(repositories => {
-  console.log('repository 的 registry 数量', repositories.length);
+  console.log('repository 的 registry 数量', Object.keys(repositories));
 });
 
 export {

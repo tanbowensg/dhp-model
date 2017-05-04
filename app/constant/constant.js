@@ -23,22 +23,23 @@ const PRIVATE_LABELS = [
 
 const API_URL = 'http://192.168.100.205';
 
-// const REGISTRY_CONSTANT = {
-//   // 特殊的 namespace 表示‘空’
-//   spNamespace: 'none__',
-//   spNamespaceShow: '(空)',
-//   allNamespace: 0, // 不用 null 的原因是在 dao-select 中 null 为没有值的情况
-//   DCERegName: 'buildin-registry',
-//   providerIconMap: {
-//     Git: 'git',
-//     svn: 'subversion',
-//     GitLab: 'gitlab',
-//     GitHub: 'github',
-//     upload: 'upload',
-//   },
-// };
+const REGISTRY_CONSTANT = {
+  // 特殊的 namespace 表示‘空’
+  spNamespace: 'none__',
+  spNamespaceShow: '(空)',
+  allNamespace: 0, // 不用 null 的原因是在 dao-select 中 null 为没有值的情况
+  DCERegistryName: 'buildin-registry',
+  providerIconMap: {
+    Git: 'git',
+    svn: 'subversion',
+    GitLab: 'gitlab',
+    GitHub: 'github',
+    upload: 'upload',
+  },
+};
 
 export {
   PRIVATE_LABELS,
   API_URL,
+  REGISTRY_CONSTANT,
 };

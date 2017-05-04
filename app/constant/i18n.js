@@ -61,7 +61,16 @@ const CONTAINER = {
   },
 };
 
+const REPOSITORY = {
+  authMethods: {
+    key_pair: '使用 SSH 公钥认证',
+    password: '使用用户名密码认证',
+    blank: '无需认证',
+  },
+};
+
 export {
   JOB,
   CONTAINER,
+  REPOSITORY,
 };
