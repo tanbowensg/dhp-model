@@ -22,17 +22,16 @@ const repositories$ = registries$.concatMap(registries => Rx.Observable.from(reg
   .map(([registryName, repos]) => {
     const formattedRepos = _.map(repos, repo => {
       return new RepositoryClass(repo);
-      // return repo.Name;
     });
     return [registryName, formattedRepos];
   })
-  .toArray();
-  // 格式化
+  .toArray()
+  .map(_.fromPairs);
 
 repositories$.subscribe(repositoriesVm$$);
 
 repositoriesVm$$.subscribe(repositories => {
-  console.log('repository 的 registry 数量', Object.keys(repositories));
+  console.log('拿到这两个 registry 的 repository 了', _.size(repositories));
 });
 
 export {
