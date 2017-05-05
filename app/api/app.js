@@ -1,7 +1,7 @@
 import { get, post } from '../util/util.js';
 import { API_URL } from '../constant/constant.js';
 
-function list(configs = {}) {
+function list(configs) {
   console.log('重新拿了 应用 列表')
   return get(`${API_URL}/api/apps`, configs);
 }

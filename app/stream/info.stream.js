@@ -8,7 +8,7 @@ function getApiInfo() {
   observable.subscribe(apiInfo => {
     apiInfo$.next(apiInfo);
   }, rej => {
-    console.log(rej);
+    console.error(rej);
   });
   return observable;
 }

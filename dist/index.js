@@ -8,6 +8,10 @@ var _hub = require('./stream/hub.js');
 
 var _hub2 = _interopRequireDefault(_hub);
 
+var _init = require('./stream/init.js');
+
+var _init2 = _interopRequireDefault(_init);
+
 var _appStream = require('./stream/app.stream.js');
 
 var _serviceStream = require('./stream/service.stream.js');
@@ -23,6 +27,8 @@ var _registryStream = require('./stream/registry.stream.js');
 var _repositoryStream = require('./stream/repository.stream.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _init2.default)('admin', 'admin');
 
 var server = _restify2.default.createServer();
 

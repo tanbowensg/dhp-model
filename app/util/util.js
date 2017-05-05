@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import http from 'http';
+import auth from '../stream/auth.js';
 import { PRIVATE_LABELS } from '../constant/constant.js';
 
 function cutUrl(url) {
@@ -15,8 +16,11 @@ function get(url, configs) {
   const options = {
     hostname: hostPath.host,
     path: hostPath.path,
-    headers: configs ? configs.headers : null,
+    headers: configs ? configs.headers : {},
   };
+  if (_.get(auth, 'token.AccessToken')) {
+    options.headers['X-DCE-Access-Token'] = _.get(auth, 'token.AccessToken');
+  }
   return new Promise((resolve, reject) => {
     const req = http.get(options, res => {
       let json = '';
@@ -51,6 +55,9 @@ function post(url, params, configs) {
     headers: configs ? configs.headers : {},
     method: 'POST',
   };
+  if (_.get(auth, 'token.AccessToken')) {
+    options.headers['X-DCE-Access-Token'] = _.get(auth, 'token.AccessToken');
+  }
   return new Promise((resolve, reject) => {
     const req = http.request(options, res => {
       let json = '';
@@ -244,6 +251,14 @@ function filterLabels(originalLabels) {
   return filterdLabels;
 }
 
+function toBase64(data) {
+  // 如果在浏览器环境中，用原生的 btoa 方法
+  if (typeof window === 'Object' && window.btoa) {
+    return (btoa.data)
+  }
+  return new Buffer(data).toString('base64');
+}
+
 export {
   get,
   post,
@@ -251,4 +266,5 @@ export {
   formatSize,
   nameFilter,
   filterLabels,
+  toBase64,
 };

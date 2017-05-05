@@ -1,5 +1,6 @@
 import restify from 'restify';
 import hub from './stream/hub.js';
+import init from './stream/init.js';
 import { appsVm$$, getAppDetail } from './stream/app.stream.js';
 import { servicesVm$$ } from './stream/service.stream.js';
 import { tasksVm$$ } from './stream/task.stream.js';
@@ -7,6 +8,8 @@ import { networksVm$$ } from './stream/network.stream.js';
 import { containersVm$$ } from './stream/container.stream.js';
 import { registriesVm$$ } from './stream/registry.stream.js';
 import { repositoriesVm$$ } from './stream/repository.stream.js';
+
+init('admin', 'admin');
 
 const server = restify.createServer();
 

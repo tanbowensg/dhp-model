@@ -9,6 +9,7 @@ function list() {
 
 // 获取内置的镜像工场
 function getBuildinRegistry() {
+  console.log('拿了内置的镜像工场')
   return get(`${API_URL}/api/settings/buildin-registry`);
 }
 

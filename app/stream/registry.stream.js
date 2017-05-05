@@ -5,25 +5,23 @@ import registryApi from '../api/registry.js';
 import hub from './hub.js';
 const registriesVm$$ = new Rx.BehaviorSubject().filter(v => v);
 
-// 先去拿内置的镜像工场
-const buildinRegistry = hub.registries$.concatMap(() => Rx.Observable.fromPromise(registryApi.getBuildinRegistry()))
-  // .concatMap(() => {
-  //   return Rx.Observable.fromPromise(registryApi.getRegistryRepositories('buildin-registry'));
-  // });
-
 // 再拿其他的镜像工程
-const registries$ = Rx.Observable.zip(
-  buildinRegistry,
-  Rx.Observable.fromPromise(registryApi.list()),
-  (buildin, others) => {
-    // 最后拼起来
-    const result = _.clone(others);
-    result.unshift(buildin);
-    return result;
+const registries$ = hub.registries$
+  .concatMap(() => {
+    return Rx.Observable.zip(
+      // 内置的镜像工场
+      Rx.Observable.fromPromise(registryApi.getBuildinRegistry()),
+      // 除了内置的以外的镜像工场
+      Rx.Observable.fromPromise(registryApi.list()),
+      (buildin, others) => {
+        // 最后拼起来
+        const result = _.clone(others);
+        result.unshift(buildin);
+        return result;
+      });
   });
-  // 格式化
-  // .map(registries => _.map(registries, registry => new RegistryClass(registry)));
-
+// 格式化
+// .map(registries => _.map(registries, registry => new RegistryClass(registry)));
 
 registries$.subscribe(registriesVm$$);
 
