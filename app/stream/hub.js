@@ -17,7 +17,7 @@ class Hub {
   _init() {
     // 此乃一切 Observable 和 Subject 起点，故名 alpha。 ———— 博文
     this.α$$ = new Rx.BehaviorSubject().filter(v => v);
-    this.socket$$ = new Rx.Subject();
+    this._socket$$ = new Rx.Subject();
     // hub 是事件的转发器。收到 socket 推送的 job 后，hub 来转发给那些该更新的 Observable
     // 一 Observable 之下，万 Observable 之上。
     this.hub$$ = new Rx.Subject()
@@ -63,27 +63,29 @@ class Hub {
       .subscribe(this.α$$);
 
     // 当 α$$ 产生值以后，就启动 socket
-    this.α$$.subscribe(apiInfo => {
+    this.α_ = this.α$$.subscribe(apiInfo => {
       // 由于一开始没有 job 推送，为了初始化整个数据池，先手动推送一个 init job
       socketio.connect(apiInfo.StreamRoom);
       socketio.bind('observable', job => {
-        this.socket$$.next(job);
+        this._socket$$.next(job);
       });
+      // 在 subscribe 之前，先把之前的 subscripition 都 unsubscribe，以免重复登录
+      this._unsubscribeSocket();
+      // 用 hub$$ 订阅 _socket$$
+      this._socket_ = this._socket$$.subscribe(this.hub$$);
       // 初始化一下
-      this.socket$$.next('all');
+      this._socket$$.next('all');
       // job 暂时是不需要格式化的
       // .map(job => new JobClass(job))
     });
 
-    // 用 hub$$ 订阅 socket$$
-    this.socket$$.subscribe(this.hub$$);
   }
 
   // 停止数据层
-  stop() {
-    this.α$$.complete();
-    this.socket$$.complete();
-    this.hub$$.complete();
+  _unsubscribeSocket() {
+    if (this._socket_) {
+      this._socket_.unsubscribe();
+    }
   }
 }
 

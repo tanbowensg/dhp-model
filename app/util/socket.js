@@ -30,7 +30,7 @@ function bind(action, callback) {
     callbackCancellers[action] = canceller;
   } else {
     // 如果尝试绑定相同名字的回调，会弹出警告
-    this.$log.warn(`'${action}' is already binded, please offJobUpdate it before you rebind it.`);
+    console.warn(`'${action}' is already binded, please offJobUpdate it before you rebind it.`);
   }
 }
 
