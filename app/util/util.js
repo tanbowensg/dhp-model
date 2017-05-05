@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import http from 'http';
-import auth from '../stream/auth.js';
+import { token } from '../stream/auth.js';
 import { PRIVATE_LABELS } from '../constant/constant.js';
 
 function cutUrl(url) {
@@ -18,8 +18,8 @@ function get(url, configs) {
     path: hostPath.path,
     headers: configs ? configs.headers : {},
   };
-  if (_.get(auth, 'token.AccessToken')) {
-    options.headers['X-DCE-Access-Token'] = _.get(auth, 'token.AccessToken');
+  if (_.get(token, 'AccessToken')) {
+    options.headers['X-DCE-Access-Token'] = _.get(token, 'AccessToken');
   }
   return new Promise((resolve, reject) => {
     const req = http.get(options, res => {
@@ -55,8 +55,8 @@ function post(url, params, configs) {
     headers: configs ? configs.headers : {},
     method: 'POST',
   };
-  if (_.get(auth, 'token.AccessToken')) {
-    options.headers['X-DCE-Access-Token'] = _.get(auth, 'token.AccessToken');
+  if (_.get(token, 'AccessToken')) {
+    options.headers['X-DCE-Access-Token'] = _.get(token, 'AccessToken');
   }
   return new Promise((resolve, reject) => {
     const req = http.request(options, res => {

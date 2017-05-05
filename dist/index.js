@@ -4,13 +4,13 @@ var _restify = require('restify');
 
 var _restify2 = _interopRequireDefault(_restify);
 
-var _hub = require('./stream/hub.js');
-
-var _hub2 = _interopRequireDefault(_hub);
-
 var _init = require('./stream/init.js');
 
 var _init2 = _interopRequireDefault(_init);
+
+var _hub = require('./stream/hub.js');
+
+var _hub2 = _interopRequireDefault(_hub);
 
 var _appStream = require('./stream/app.stream.js');
 
@@ -26,9 +26,11 @@ var _registryStream = require('./stream/registry.stream.js');
 
 var _repositoryStream = require('./stream/repository.stream.js');
 
+var _auth = require('./stream/auth.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _init2.default)('admin', 'admin');
+(0, _init2.default)();
 
 var server = _restify2.default.createServer();
 
@@ -162,6 +164,16 @@ _repositoryStream.repositoriesVm$$.subscribe(function (res) {
 server.get('/repositories', function (req, response, next) {
   console.log(repositories);
   response.send(repositories);
+  next();
+});
+
+var auth = void 0;
+_auth.auth$$.subscribe(function (res) {
+  auth = res;
+});
+server.post('/login', function (req, response, next) {
+  (0, _auth.login)('admin', 'admin');
+  response.send(auth);
   next();
 });
 
