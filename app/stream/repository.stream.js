@@ -5,13 +5,13 @@ import Rx from 'rxjs/Rx';
 import _ from 'lodash';
 import registryApi from '../api/registry.js';
 // 由于 repository 是 registry 的一个属性，所以就直接接在 registry 后面，不要 hub 了。
-import { registries$ } from './registry.stream.js';
+import { registriesVm$$ } from './registry.stream.js';
 import { Repository as RepositoryClass } from '../factory/repository.js';
 import { REGISTRY_CONSTANT } from '../constant/constant.js';
 
 const repositoriesVm$$ = new Rx.BehaviorSubject().filter(v => v);
 // 每当拿到一个 registry 的时候，就去请求他的 repository。但其实 registry 不依赖 repository。
-const repositories$ = registries$.concatMap(registries => Rx.Observable.from(registries))
+const repositories$ = registriesVm$$.concatMap(registries => Rx.Observable.from(registries))
   .concatMap(registry => {
     // 如果没有名字的话，说明它是内置镜像工场
     const name = registry.Name ? registry.Name : REGISTRY_CONSTANT.DCERegistryName;
