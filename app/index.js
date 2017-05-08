@@ -1,6 +1,5 @@
 import restify from 'restify';
-import init from './stream/init.js';
-import hub from './stream/hub.js';
+import { init, α$$ } from './stream/alpha.js';
 import { appsVm$$, getAppDetail } from './stream/app.stream.js';
 import { servicesVm$$ } from './stream/service.stream.js';
 import { tasksVm$$ } from './stream/task.stream.js';
@@ -8,9 +7,8 @@ import { networksVm$$ } from './stream/network.stream.js';
 import { containersVm$$ } from './stream/container.stream.js';
 import { registriesVm$$ } from './stream/registry.stream.js';
 import { repositoriesVm$$ } from './stream/repository.stream.js';
-import { auth$$, login } from './stream/auth.js';
-
-init();
+import { auth$$, userInfo$$, login } from './stream/auth.js';
+init('admin', 'admin');
 
 const server = restify.createServer();
 
@@ -99,7 +97,7 @@ server.get('/tasks', (req, response, next) => {
 });
 
 let apiInfo;
-hub.α$$.subscribe(res => {
+α$$.subscribe(res => {
   apiInfo = res;
 });
 server.get('/api/info', (req, response, next) => {
@@ -155,6 +153,15 @@ auth$$.subscribe(res => {
 server.post('/login', (req, response, next) => {
   login('admin', 'admin');
   response.send(auth);
+  next();
+});
+
+let userInfo;
+userInfo$$.subscribe(res => {
+  userInfo = res;
+});
+server.get('/userinfo', (req, response, next) => {
+  response.send(userInfo);
   next();
 });
 

@@ -4,13 +4,7 @@ var _restify = require('restify');
 
 var _restify2 = _interopRequireDefault(_restify);
 
-var _init = require('./stream/init.js');
-
-var _init2 = _interopRequireDefault(_init);
-
-var _hub = require('./stream/hub.js');
-
-var _hub2 = _interopRequireDefault(_hub);
+var _alpha = require('./stream/alpha.js');
 
 var _appStream = require('./stream/app.stream.js');
 
@@ -30,7 +24,7 @@ var _auth = require('./stream/auth.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _init2.default)();
+(0, _alpha.init)('admin', 'admin');
 
 var server = _restify2.default.createServer();
 
@@ -118,7 +112,7 @@ server.get('/tasks', function (req, response, next) {
 });
 
 var apiInfo = void 0;
-_hub2.default.α$$.subscribe(function (res) {
+_alpha.α$$.subscribe(function (res) {
   apiInfo = res;
 });
 server.get('/api/info', function (req, response, next) {
@@ -174,6 +168,15 @@ _auth.auth$$.subscribe(function (res) {
 server.post('/login', function (req, response, next) {
   (0, _auth.login)('admin', 'admin');
   response.send(auth);
+  next();
+});
+
+var userInfo = void 0;
+_auth.userInfo$$.subscribe(function (res) {
+  userInfo = res;
+});
+server.get('/userinfo', function (req, response, next) {
+  response.send(userInfo);
   next();
 });
 
