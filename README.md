@@ -4,9 +4,9 @@
 ## 启动方法
 `npm start`：在本地的 4000 端口启动服务器，具体路由参看 index.js 里的内容。
 
-`npm run build`：打包代码，结果在 build 目录中。
+`npm run build`：用 babel 编译代码，结果在 dist 目录中。
 
-`npm run build:browser`：打包代码，结果在 build 目录中。
+`npm run webpack`：用 wenpack 打包代码，结果在 build 目录中。
 
 `npm run watch`：持续用 babel 编译源代码。
 

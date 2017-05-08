@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "gulp babel && node ./dist/index.js",
-    "build": "gulp webpack",
-    "build:browser": "gulp webpack:browser",
+    "build": "gulp babel",
+    "webpack": "gulp webpack",
     "watch": "gulp watch",
     "start:dist": "node ./build/bundle.js"
   },

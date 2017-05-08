@@ -32,19 +32,6 @@ gulp.task('babel', ['clean'], () => {
 });
 
 gulp.task('webpack', ['babel', 'cleanbuild'], () => {
-  return gulp.src(['./dist/index.js'])
-    .pipe(webpackStream({
-      output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build'),
-      },
-      target: 'node',
-      externals: nodeModules,
-    }, webpack2))
-    .pipe(gulp.dest('build'));
-});
-
-gulp.task('webpack:browser', ['babel', 'cleanbuild'], () => {
   return gulp.src(['./dist/index-browser.js'])
     .pipe(webpackStream({
       output: {
